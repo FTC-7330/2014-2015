@@ -53,7 +53,7 @@ void inputManager()
 
 // uses the joystick values to drive the wheels
 // can drive in both "mecanum mode" and "tank mode"
-task Drive()
+task drive()
 {
 	// mecanum driving
 	// 242 could be more precise
@@ -76,5 +76,5 @@ task Drive()
 task main()
 {
 	inputManager();
-	StartTask(Drive);
+	StartTask(drive);
 }

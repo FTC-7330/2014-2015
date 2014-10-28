@@ -68,7 +68,7 @@ int turnPower(float degDistance) {
 //if runForever is true, drives forever
 void drive(int distanceInches, int rightSpeed, int leftSpeed, bool runForever)
 {
-	distanceTicks = (int)(distanceInches / 0.044879895);
+	int distanceTicks = (int)(distanceInches / 0.044879895);
 	nMotorEncoder[backRight] = 0;
 	nMotorEncoder[backLeft] = 0;
 	nMotorEncoder[frontRight] = 0;
