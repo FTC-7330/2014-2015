@@ -16,7 +16,6 @@ int deadZone = 10;
 
 // 1 is the right joystick
 // 2 is the left joystick
-
 /* inputManager reads input from both controllers and sets the values of
 	 corresponding variables
 
