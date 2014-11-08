@@ -18,8 +18,9 @@
 
 task main()
 {
+
 	drive(83, 80, 80, false);
-	turn(-45, -80);
+	turn(45, 80);
 	drive(26, 80, 8, false);
 	turn(90, 80);
 	drive(26, 80, 80, false);
