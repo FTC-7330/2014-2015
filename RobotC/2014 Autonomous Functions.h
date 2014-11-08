@@ -40,10 +40,10 @@ void updateHeading()
 	lastTime = time1[T1]; // sets the last time for the next reading
 	if (time1[T1] > 30000) // this resets the timer after 30 seconds
 	{
-		ClearTimer(T1);
+		clearTimer(T1);
 		lastTime = 0;
 	}
-	radheading = degHeading / 180 * PI; // the heading expressed in radians
+	radHeading = degHeading / 180 * PI; // the heading expressed in radians
 	wait1Msec(10); // lets other tasks run
 }
 
@@ -58,11 +58,6 @@ int min(int a, int b)
 		return b;
 	}
 }
-
-int turnPower(float degDistance) {
-	return (min((degDistance), 10) / 10) * 85 + 5;
-}
-
 
 // reset encoder values; drives for the distance given at the given speed;
 //if runForever is true, drives forever
@@ -95,23 +90,26 @@ void drive(int distanceInches, int rightSpeed, int leftSpeed, bool runForever)
 	nMotorEncoder[frontLeft] = 0;
 }
 
+int turnPower(float degDistance) {
+	return (min((degDistance), 10) / 10) * 85 + 15;
+}
 
 void turn(float degrees, int power)
 {
 	float targetHeading = degHeading + degrees;
-	while (abs(targetHeading - degHeading) > .5)
+	while (abs(targetHeading - degHeading) > .25)
 	{
 		updateHeading();
 		power = turnPower(abs(targetHeading - degHeading));
 		if (targetHeading - degHeading > 0) // left turn
 		{
-			drive(0, power, -power, true);
+			drive(0.02, power, -power, false);
 		}
 		else // right turn
 		{
-			drive(0, -power, power, true);
+			drive(0.02, -power, power, false);
 		}
-		wait1Msec(10);
+
 	}
 	motor[backRight] = 0;
 	motor[backLeft] = 0;
@@ -153,7 +151,7 @@ void initializeRobot()
 	ClearTimer(T1);
 
 	int sum = 0;
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < 101; i++) {
 		sum += SensorValue[gyro];
 		wait1Msec(1);
 	}
