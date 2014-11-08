@@ -7,12 +7,6 @@
 #pragma config(Motor,  mtr_S1_C1_2,     backLeft,      tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C2_1,     frontRight,    tmotorTetrix, PIDControl, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C2_2,     frontLeft,     tmotorTetrix, PIDControl, encoder)
-#pragma config(Servo,  srvo_S1_C3_1,    gripper,              tServoNone)
-#pragma config(Servo,  srvo_S1_C3_2,    servo2,               tServoNone)
-#pragma config(Servo,  srvo_S1_C3_3,    servo3,               tServoNone)
-#pragma config(Servo,  srvo_S1_C3_4,    servo4,               tServoNone)
-#pragma config(Servo,  srvo_S1_C3_5,    servo5,               tServoNone)
-#pragma config(Servo,  srvo_S1_C3_6,    servo6,               tServoNone)
 
 // Functions for Autonomous Methods
 // - display
@@ -90,17 +84,18 @@ void drive(int distanceInches, int rightSpeed, int leftSpeed, bool runForever)
 	nMotorEncoder[frontLeft] = 0;
 }
 
-int turnPower(float degDistance) {
-	return (min((degDistance), 10) / 10) * 85 + 15;
+int turnPower(float degDistance, int power) {
+	return (min((degDistance), 10) / 10) * (power - 15) + 15;
 }
 
+// power must be greater than 15
 void turn(float degrees, int power)
 {
 	float targetHeading = degHeading + degrees;
 	while (abs(targetHeading - degHeading) > .25)
 	{
 		updateHeading();
-		power = turnPower(abs(targetHeading - degHeading));
+		power = turnPower(abs(targetHeading - degHeading), power);
 		if (targetHeading - degHeading > 0) // left turn
 		{
 			drive(0.02, power, -power, false);

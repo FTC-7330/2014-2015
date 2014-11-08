@@ -7,21 +7,15 @@
 #pragma config(Motor,  mtr_S1_C1_2,     backLeft,      tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C2_1,     frontRight,    tmotorTetrix, PIDControl, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C2_2,     frontLeft,     tmotorTetrix, PIDControl, encoder)
-#pragma config(Servo,  srvo_S1_C3_1,    gripper,              tServoNone)
-#pragma config(Servo,  srvo_S1_C3_2,    servo2,               tServoNone)
-#pragma config(Servo,  srvo_S1_C3_3,    servo3,               tServoNone)
-#pragma config(Servo,  srvo_S1_C3_4,    servo4,               tServoNone)
-#pragma config(Servo,  srvo_S1_C3_5,    servo5,               tServoNone)
-#pragma config(Servo,  srvo_S1_C3_6,    servo6,               tServoNone)
 
 #include "2014 Autonomous Functions.h"
 
 task main()
 {
 
-	drive(83, 80, 80, false);
-	turn(45, 80);
-	drive(26, 80, 8, false);
-	turn(90, 80);
-	drive(26, 80, 80, false);
+	drive(40, 80, 80, false); // 83
+	//turn(45, 80); // 45
+	//drive(-40, 80, 80, false); // 26
+	//turn(-45, 80); // 90
+	//drive(0, 80, 80, true);// 26 false
 }
