@@ -3,10 +3,10 @@
 #pragma config(Sensor, S2,     irSensor,       sensorHiTechnicIRSeeker1200)
 #pragma config(Sensor, S3,     sonar,          sensorSONAR)
 #pragma config(Sensor, S4,     gyro,           sensorI2CHiTechnicGyro)
-#pragma config(Motor,  mtr_S1_C1_1,     backRight,     tmotorTetrix, PIDControl, reversed, encoder)
-#pragma config(Motor,  mtr_S1_C1_2,     backLeft,      tmotorTetrix, PIDControl, encoder)
-#pragma config(Motor,  mtr_S1_C2_1,     frontRight,    tmotorTetrix, PIDControl, reversed, encoder)
-#pragma config(Motor,  mtr_S1_C2_2,     frontLeft,     tmotorTetrix, PIDControl, encoder)
+#pragma config(Motor,  mtr_S1_C1_1,     backRight,     tmotorTetrix, openLoop, encoder)
+#pragma config(Motor,  mtr_S1_C1_2,     backLeft,      tmotorTetrix, openLoop, reversed, encoder)
+#pragma config(Motor,  mtr_S1_C2_1,     frontRight,    tmotorTetrix, openLoop, encoder)
+#pragma config(Motor,  mtr_S1_C2_2,     frontLeft,     tmotorTetrix, openLoop, reversed, encoder)
 
 // Functions for Autonomous Methods
 // - display
@@ -120,11 +120,13 @@ task display()
     while (true)
     {
     	//Displays information about encoders and IR and sonar sensors
-			int display = SensorValue[irSensor];
-			int sonarValue = SensorValue[sonar];
+			int freftEncoder = nMotorEncoder[backLeft];
+			int rightEncoder = nMotorEncoder[backRight];
 
-			nxtDisplayString(0,"%d", display);
-			nxtDisplayString(3, "Sonar: %d", sonarValue);
+			nxtDisplayString(1,"back left: %d", nMotorEncoder[backLeft]);
+			nxtDisplayString(2, "back right %d", nMotorEncoder[backRight]);
+		  nxtDisplayString(3,"front left: %d", nMotorEncoder[frontLeft]);
+			nxtDisplayString(4, "front right %d", nMotorEncoder[frontRight]);
 	  }
 }
 //continues driving until encoders reach destination, then resets motor speed.
