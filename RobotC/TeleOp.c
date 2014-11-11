@@ -1,5 +1,5 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  none)
-#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
+#pragma config(Sensor, S3,     irSensor,       sensorHiTechnicIRSeeker600)
 #pragma config(Motor,  mtr_S1_C1_1,     backRight,     tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     backLeft,      tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C2_1,     frontRight,    tmotorTetrix, openLoop, encoder)
@@ -60,10 +60,10 @@ void inputManager()
 			getJoystickSettings(joystick);
 			bPressed = (joy1Btn(BUTTON_B)==1);
 			aPressed = (joy1Btn(BUTTON_A)==1);
-			joystickRightY = checkDeadZone(joystick.joy1_y1);
-			joystickLeftY = checkDeadZone(joystick.joy1_y2);
-			joystickRightX = checkDeadZone(joystick.joy1_x1);
-			joystickLeftX = checkDeadZone(joystick.joy1_x2);
+			joystickRightY = checkDeadZone(-joystick.joy1_y2);
+			joystickLeftY = checkDeadZone(-joystick.joy1_y1);
+			joystickRightX = checkDeadZone(joystick.joy1_x2);
+			joystickLeftX = checkDeadZone(joystick.joy1_x1);
 	}
 }
 
@@ -116,9 +116,19 @@ task collection()
 
 }
 
+task display()
+{
+	while(true)
+	{
+		int irSensorValue = irSensor;
+		nxtDisplayString(1, "InfaRed: %d       ", irSensorValue);
+	}
+}
+
 task main()
 {
 	StartTask(drive);
 	StartTask(collection);
+	StartTask(display);
 	inputManager();
 }
