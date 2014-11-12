@@ -19,7 +19,7 @@
  * version 0.3
  */
 
-#include "hitechnic-gyro.h"
+#include "..\include\hitechnic-gyro.h"
 
 task main () {
   displayTextLine(0, "HT Gyro");

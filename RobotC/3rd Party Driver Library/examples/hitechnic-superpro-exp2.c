@@ -10,7 +10,7 @@ digital value to one of six LEDs.
 
 */
 
-#include "hitechnic-superpro.h"
+#include "..\include\hitechnic-superpro.h"
 
 task main() {
   short inputdata;

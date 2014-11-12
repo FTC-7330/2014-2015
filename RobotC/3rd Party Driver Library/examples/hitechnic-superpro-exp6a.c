@@ -9,7 +9,7 @@ This program measures the time taken to press a button switch after an LED is tu
 
 */
 
-#include "hitechnic-superpro.h"
+#include "..\include\hitechnic-superpro.h"
 
 task main() {
   // The data to be written: 0x30 = 110000 binary,

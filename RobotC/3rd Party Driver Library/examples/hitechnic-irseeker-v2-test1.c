@@ -22,7 +22,7 @@
  * version 0.1
  */
 
-#include "hitechnic-irseeker-v2.h"
+#include "..\include\hitechnic-irseeker-v2.h"
 
 // main task
 task main ()
