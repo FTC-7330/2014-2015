@@ -24,7 +24,7 @@ task main() {
     // Read a 10bit wide analogue value from A0
     inputdata = HTSPBreadADC(HTSPB, 0, 10);
 
-    nxtDisplayTextLine(1, "A0: %d", inputdata);
+    displayTextLine(1, "A0: %d", inputdata);
 
     // Set the output bit based on the analogue input value
     bit = (inputdata/128);

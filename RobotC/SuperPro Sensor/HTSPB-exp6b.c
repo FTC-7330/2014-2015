@@ -23,7 +23,7 @@ task main() {
     HTSPBwriteIO(HTSPB, 0x00);
 
     eraseDisplay();
-    nxtDisplayTextLine(2, "running");
+    displayTextLine(2, "running");
 
     wait1Msec(random(5000) + 3000);
 
@@ -43,7 +43,7 @@ task main() {
     }
 
     eraseDisplay();
-    nxtDisplayTextLine(2, "Time: %d", time1[T1]);
+    displayTextLine(2, "Time: %d", time1[T1]);
 
     while (HTSPBreadIO(HTSPB, 0x30) != 0x30) {
       wait1Msec(5);

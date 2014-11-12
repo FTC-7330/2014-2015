@@ -22,7 +22,7 @@ task main() {
     HTSPBwriteIO(HTSPB, 0x00);
 
     eraseDisplay();
-    nxtDisplayTextLine(2, "running");
+    displayTextLine(2, "running");
 
     // Wait a random time between 3 and 8 seconds.
     wait1Msec(random(5000) + 3000);
@@ -37,7 +37,7 @@ task main() {
     }
 
     eraseDisplay();
-    nxtDisplayTextLine(2, "Time: %d", time1[T1]);
+    displayTextLine(2, "Time: %d", time1[T1]);
 
     // Wait for user to reset
     while (HTSPBreadIO(HTSPB, 0x30) != 0x30) {

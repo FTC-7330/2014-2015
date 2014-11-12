@@ -35,7 +35,7 @@ task main() {
     outputdata = 1 << bit;
 
     eraseDisplay();
-    nxtDisplayTextLine(1, "%d", sonarvalue);
+    displayTextLine(1, "%d", sonarvalue);
 
     HTSPBwriteIO(HTSPB, outputdata);
     wait1Msec(50);
