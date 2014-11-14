@@ -1,7 +1,4 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
-#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
-#pragma config(Sensor, S2,     irSensor,       sensorHiTechnicIRSeeker1200)
-#pragma config(Sensor, S3,     sonar,          sensorSONAR)
 #pragma config(Sensor, S4,     gyro,           sensorI2CHiTechnicGyro)
 #pragma config(Motor,  mtr_S1_C1_1,     backRight,     tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     backLeft,      tmotorTetrix, PIDControl, reversed, encoder)
@@ -55,9 +52,9 @@ int min(int a, int b)
 
 // reset encoder values; drives for the distance given at the given speed;
 //if runForever is true, drives forever
-void drive(int distanceInches, int rightSpeed, int leftSpeed, bool runForever)
+void drive(int distanceTicks, int rightSpeed, int leftSpeed, bool runForever)
 {
-	int distanceTicks = (int)(distanceInches / 0.044879895);
+	//int distanceTicks = (int)(distanceInches / 0.044879895);
 	nMotorEncoder[backRight] = 0;
 	nMotorEncoder[backLeft] = 0;
 	nMotorEncoder[frontRight] = 0;
@@ -77,6 +74,7 @@ void drive(int distanceInches, int rightSpeed, int leftSpeed, bool runForever)
 	{
 		waitForStop();
 	}
+
 
 	nMotorEncoder[backRight] = 0;
 	nMotorEncoder[backLeft] = 0;
