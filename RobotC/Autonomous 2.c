@@ -11,19 +11,36 @@
 
 #include "2014 Autonomous Functions.h"
 
+//distance from top of ramp to bottom: 58 inches
+//distance from ramp to rolling goals: approximately 48 inches
+//distance from ramp to centerpiece: 31 inches
+//distance from end of ramp to wall: 23 3/4 inches
+
 task main()
 {
+	//waitForStart();
+	initializeRobot();
 	startTask(display);
-	drive(4000, 50, 50, false);
-//	while (true)
-//	{
-//		motor[backRight] = 10;
-//		motor[backLeft] = 10;
-//		motor[frontRight] = 10;
-//		motor[frontLeft] = 10;
-//	}// 83
-	//turn(45, 80); // 45
-	//drive(-40, 80, 80, false); // 26
-	//turn(-45, 80); // 90
-	//drive(0, 80, 80, true);// 26 false
+
+	//drive off the ramp backwards towards the 60cm rolling goal
+		//drive backwards 58 power 20
+		//drive backwards 54 inches power 50
+
+	//capture 60cm rolling goal
+		//move onboard ramp to capture the goal
+
+	//put the balls into the rolling goal
+		//drive the motor to raise the arm
+		//spin the motor to release the balls
+
+	//drive to the scoring area
+		//turn 90 degrees left
+		//drive backwards 35 inches
+		//turn 90 degrees left
+		//drive backeards 98 inches
+		//turn 90 degrees right
+		//drive backwards 10 inches
+
+	//?detatch?
+
 }
