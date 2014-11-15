@@ -75,11 +75,10 @@ void drive(int distanceTicks, int rightSpeed, int leftSpeed, bool runForever)
 		waitForStop();
 	}
 
-
+	nMotorEncoder[frontLeft] = 0;
 	nMotorEncoder[backRight] = 0;
 	nMotorEncoder[backLeft] = 0;
 	nMotorEncoder[frontRight] = 0;
-	nMotorEncoder[frontLeft] = 0;
 }
 
 int turnPower(float degDistance, int power) {
@@ -127,6 +126,19 @@ task display()
 			nxtDisplayString(4, "front right %d", nMotorEncoder[frontRight]);
 	  }
 }
+
+task printEncoderValues()
+{
+	while(true)
+	{
+		writeDebugStreamLine("Back Left Encoder Value: %d",nMotorEncoder[backLeft]);
+		writeDebugStreamLine("Back Right Encoder Value: %d",nMotorEncoder[backRight]);
+		writeDebugStreamLine("Front Left Encoder Value: %d",nMotorEncoder[frontLeft]);
+		writeDebugStreamLine("Front Right Encoder Value: %d",nMotorEncoder[frontRight]);
+		writeDebugStreamLine("");
+		wait1Msec(500);
+	}
+}
 //continues driving until encoders reach destination, then resets motor speed.
 void waitForStop()
 {
@@ -135,10 +147,10 @@ void waitForStop()
 	{
 	}
 
+	motor[frontLeft] = 0;
 	motor[backRight] = 0;
 	motor[backLeft] = 0;
 	motor[frontRight] = 0;
-	motor[frontLeft] = 0;
 }
 
 void initializeRobot()

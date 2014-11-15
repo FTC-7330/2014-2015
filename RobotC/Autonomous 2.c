@@ -19,8 +19,24 @@
 task main()
 {
 	//waitForStart();
-	initializeRobot();
-	startTask(display);
+	//initializeRobot();
+	startTask(printEncoderValues);
+	drive(4000,50,50,false);
+
+	//motor[backLeft] = 50;
+	//motor[backRight] = 50;
+	//motor[frontLeft] = 50;
+	//motor[frontRight] = 50;
+
+	/*wait1Msec(2000);
+
+
+	motor[backLeft] = 0;
+	motor[backRight] = 0;
+	motor[frontLeft] = 0;
+	motor[frontRight] = 0;
+
+	//startTask(display);*/
 
 	//drive off the ramp backwards towards the 60cm rolling goal
 		//drive backwards 58 power 20
