@@ -21,13 +21,14 @@
 float degHeading;
 float initial;
 float radHeading;
-int lastTime = 0;
+long lastTime = 0;
+int currentVelocity;
 
 void waitForStop();
 void updateHeading()
 {
-	int currentVelocity = SensorValue[gyro] - initial; // gets the new sensor reading
-	degHeading += (currentVelocity) * (time1[T1] - lastTime) * .001; // modifies the header
+	currentVelocity = SensorValue[gyro] - initial; // gets the new sensor reading
+	degHeading = degHeading + ((currentVelocity) * (time1[T1] - lastTime) * .001); // modifies the header
 	lastTime = time1[T1]; // sets the last time for the next reading
 	if (time1[T1] > 30000) // this resets the timer after 30 seconds
 	{
@@ -35,7 +36,7 @@ void updateHeading()
 		lastTime = 0;
 	}
 	radHeading = degHeading / 180 * PI; // the heading expressed in radians
-	wait1Msec(10); // lets other tasks run
+	//wait1Msec(10); // lets other tasks run
 }
 
 int min(int a, int b)
@@ -127,6 +128,16 @@ task display()
 	  }
 }
 
+
+task printHeading()
+{
+	while(true)
+	{
+		writeDebugStreamLine("Time: %d", time1[T1]);
+		writeDebugStreamLine("Last Time: %d",  lastTime, time1[T1]);
+	}
+}
+
 task printEncoderValues()
 {
 	while(true)
@@ -158,7 +169,7 @@ void initializeRobot()
 	ClearTimer(T1);
 
 	int sum = 0;
-	for (int i = 0; i < 101; i++) {
+	for (int i = 0; i < 100; i++) {
 		sum += SensorValue[gyro];
 		wait1Msec(1);
 	}

@@ -18,5 +18,6 @@
 
 task main()
 {
-	drive(70, 80, 80, false);
+	startTask(printEncoderValues);
+	//drive(8000, 70, 70, false);
 }
