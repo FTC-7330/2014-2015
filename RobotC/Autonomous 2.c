@@ -21,27 +21,6 @@ task main()
 	//waitForStart();
 	initializeRobot();
 	startTask(printHeading);
-	//drive(8000,50,50,false);
-	turn(-45, 30);
-	//motor[backLeft] = 50;
-	//motor[backRight] = 50;
-	//motor[frontLeft] = 50;
-	//motor[frontRight] = 50;
-
-
-	//motor[backLeft] = 50;
-	//motor[frontLeft] = 50;
-	//motor[frontRight] = -50;
-	//motor[backRight] = -50;
-
-	//wait1Msec(2000);
-
-	//motor[backLeft] = 0;
-	//motor[backRight] = 0;
-	//motor[frontLeft] = 0;
-	//motor[frontRight] = 0;
-
-	//startTask(display);*/
 
 	//drive off the ramp backwards towards the 60cm rolling goal
 		drive(-58, 20, 20, false)//drive backwards 58 power 20
