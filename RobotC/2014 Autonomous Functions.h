@@ -50,7 +50,7 @@ int min(int a, int b)
 
 // reset encoder values; drives for the distance given at the given speed;
 //if runForever is true, drives forever
-void drive(int distanceInches, int rightSpeed, int leftSpeed, bool runForever)
+void drive(int distanceInches, int rightSpeed, int leftSpeed)
 {
 	int distanceTicks = (int)(distanceInches / 0.044879895);
 	nMotorEncoder[backRight] = 0;
@@ -68,10 +68,7 @@ void drive(int distanceInches, int rightSpeed, int leftSpeed, bool runForever)
 	motor[frontRight] = rightSpeed;
 	motor[frontLeft] = leftSpeed;
 
-	if (!runForever) //stops when target is reached.
-	{
-		waitForStop();
-	}
+	waitForStop();
 
 	nMotorEncoder[frontLeft] = 0;
 	nMotorEncoder[backRight] = 0;
