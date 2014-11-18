@@ -39,6 +39,7 @@ void updateHeading()
 	//wait1Msec(10); // lets other tasks run
 }
 
+//It takes in two values and returns the minimum
 int min(int a, int b)
 {
 	if (a < b)
@@ -85,8 +86,9 @@ void drive(int distanceTicks, int rightSpeed, int leftSpeed, bool runForever)
 int turnPower(float degDistance, int power) {
 	return (min((degDistance), 10) / 10) * (power - 15) + 15;
 }
-
 // power must be greater than 15
+// This method takes in an amount of degrees and power so
+// turn the robot at the given angle with the given power
 void turn(float degrees, int power)
 {
 	float targetHeading = degHeading + degrees;
@@ -145,7 +147,7 @@ task printHeading()
 		writeDebugStreamLine("Last Time: %d",  lastTime, time1[T1]);
 	}
 }
-
+//  Prints the Endoder Values on the NXT.
 task printEncoderValues()
 {
 	while(true)
@@ -171,7 +173,7 @@ void waitForStop()
 	motor[backLeft] = 0;
 	motor[frontRight] = 0;
 }
-
+//Initializes the Robot at the beginning of the match.
 void initializeRobot()
 {
 	ClearTimer(T1);
