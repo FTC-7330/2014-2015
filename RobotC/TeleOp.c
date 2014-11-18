@@ -26,7 +26,7 @@ int joystickLeftY;
 int joystickRightY;
 bool aPressed;
 bool bPressed;
-int collectionPower = 40;
+int collectionPower = 70;
 int deadZone = 10;
 
 // 1 is the right joystick
@@ -77,10 +77,10 @@ task drive()
 	// think about implementing dampening and quadratic shifting
 	while(true)
 	{
-		motor[frontLeft] = (joystickLeftY - joystickRightX + joystickLeftX)*100/250;
-		motor[backLeft] =  (joystickLeftY - joystickRightX - joystickLeftX)*100/250;
-		motor[frontRight] = (joystickLeftY + joystickRightX - joystickLeftX)*100/250;
-		motor[backRight] = (joystickLeftY + joystickRightX + joystickLeftX) *100/250;
+		motor[frontLeft] = (joystickLeftY - joystickRightX + joystickLeftX)*100/125;
+		motor[backLeft] =  (joystickLeftY - joystickRightX - joystickLeftX)*100/125;
+		motor[frontRight] = (joystickLeftY + joystickRightX - joystickLeftX)*100/125;
+		motor[backRight] = (joystickLeftY + joystickRightX + joystickLeftX) *100/125;
 	}
 	// tank driving (emergency case);
 	/*
@@ -127,8 +127,8 @@ task display()
 
 task main()
 {
-	StartTask(drive);
-	StartTask(collection);
-	StartTask(display);
+	startTask(drive);
+	startTask(collection);
+	startTask(display);
 	inputManager();
 }
