@@ -21,18 +21,21 @@ long lastTime = 0;
 int currentVelocity;
 
 void waitForStop();
-void updateHeading()
+task updateHeading()
 {
-	currentVelocity = SensorValue[gyro] - initial; // gets the new sensor reading
-	degHeading = degHeading + ((currentVelocity) * (time1[T1] - lastTime) * .001); // modifies the header
-	lastTime = time1[T1]; // sets the last time for the next reading
-	if (time1[T1] > 30000) // this resets the timer after 30 seconds
+	while(true)
 	{
-		clearTimer(T1);
-		lastTime = 0;
+		currentVelocity = SensorValue[gyro] - initial; // gets the new sensor reading
+		degHeading = degHeading + ((currentVelocity) * (time1[T1] - lastTime) * .001); // modifies the header
+		lastTime = time1[T1]; // sets the last time for the next reading
+		if (time1[T1] > 30000) // this resets the timer after 30 seconds
+		{
+			clearTimer(T1);
+			lastTime = 0;
+		}
+		radHeading = degHeading / 180 * PI; // the heading expressed in radians
+		//wait1Msec(10); // lets other tasks run
 	}
-	radHeading = degHeading / 180 * PI; // the heading expressed in radians
-	//wait1Msec(10); // lets other tasks run
 }
 
 //It takes in two values and returns the minimum
@@ -87,7 +90,6 @@ void turn(float degrees, int power)
 	float targetHeading = degHeading + degrees;
 	while (abs(targetHeading - degHeading) > .25)
 	{
-		updateHeading();
 		power = turnPower(abs(targetHeading - degHeading), power);
 		if (targetHeading - degHeading > 0) // left turn
 		{

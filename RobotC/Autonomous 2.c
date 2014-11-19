@@ -22,6 +22,7 @@ task main()
 {
 	//waitForStart();
 	initializeRobot();
+	startTask(updateHeading);
 	startTask(printHeading);
 
 	//drive off the ramp backwards towards the 60cm rolling goal
