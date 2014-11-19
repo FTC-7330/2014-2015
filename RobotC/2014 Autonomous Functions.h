@@ -233,3 +233,47 @@ void approachIR()
 		wait1Msec(10);
 	}
 }
+
+void approachIR ()
+{
+	if (irSeeker.dcValues[2] > irSeeker.dcValues[1])
+	{
+		motor[frontRight] = 50;
+		motor[frontLeft] = -50;
+		motor[backRight] = 50;
+		motor[backLeft] = -50;
+	}
+	else
+	{
+		motor[frontRight] = -50;
+		motor[frontLeft] = 50;
+		motor[backRight] = -50;
+		motor[backLeft] = 50;
+	}
+
+	while (irSeeker.dcValues[1]-irSeeker.dcValues[2] != 0)
+	{
+	}
+
+	motor[frontRight] = 0;
+	motor[frontLeft] = 0;
+	motor[backRight] = 0;
+	motor[backLeft] = 0;
+	int d;
+	int p;
+	int i;
+	int rSpeed = 50;
+	int lSpeed = 50;
+
+	while (false) //condition should be if touchSensor is true or false. Add when syntax is known
+	{
+		d = irSeeker.dcValues[1] - irSeeker.dcValues[2];
+		p = d;
+		i += d * 0.01;
+		rSpeed += (1*p + i*0.1);
+		lSpeed += (1*p + i*0.1);
+		motor[frontRight] = rSpeed;
+		motor[frontLeft] = lSpeed;
+		motor[backRight] = rSpeed;
+		motor[backLeft] = lSpeed;
+}
