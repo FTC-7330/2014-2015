@@ -24,6 +24,8 @@ int joystickLeftX;
 int joystickRightX;
 int joystickLeftY;
 int joystickRightY;
+bool isMecanum = true;
+
 bool aPressed;
 bool bPressed;
 int collectionPower = 70;
@@ -55,15 +57,27 @@ int checkDeadZone(int joystickValue)
 
 void inputManager()
 {
+	startJoyONEIsPressed = false;
+	startJoyONEWasPressed = false;
+
 	while(true)
 	{
 			getJoystickSettings(joystick);
 			bPressed = (joy1Btn(BUTTON_B)==1);
 			aPressed = (joy1Btn(BUTTON_A)==1);
+
+			startJoyONEIsPressed = (joy1Btn(BUTTON_START)==1);
+			if(startJoyONEIsPressed&&!startJoyONEWasPressed)
+			{
+				isMecanum = !isMecanum;
+			}
+
 			joystickRightY = checkDeadZone(-joystick.joy1_y2);
 			joystickLeftY = checkDeadZone(-joystick.joy1_y1);
 			joystickRightX = checkDeadZone(joystick.joy1_x2);
 			joystickLeftX = checkDeadZone(joystick.joy1_x1);
+
+			startJoyONEWasPressed = startJoyONEIsPressed;
 	}
 }
 
@@ -77,19 +91,21 @@ task drive()
 	// think about implementing dampening and quadratic shifting
 	while(true)
 	{
-		motor[frontLeft] = (joystickLeftY - joystickRightX + joystickLeftX)*100/127;
-		motor[backLeft] =  (joystickLeftY - joystickRightX - joystickLeftX)*100/127;
-		motor[frontRight] = (joystickLeftY + joystickRightX - joystickLeftX)*100/127;
-		motor[backRight] = (joystickLeftY + joystickRightX + joystickLeftX) *100/127;
+		if(isMecanum)
+		{
+			motor[frontLeft] = (joystickLeftY - joystickRightX + joystickLeftX)*100/127;
+			motor[backLeft] =  (joystickLeftY - joystickRightX - joystickLeftX)*100/127;
+			motor[frontRight] = (joystickLeftY + joystickRightX - joystickLeftX)*100/127;
+			motor[backRight] = (joystickLeftY + joystickRightX + joystickLeftX) *100/127;
+		}
+		else
+		{
+			motor[frontLeft] = joystickRightY;
+			motor[backLeft] = joystickRightY;
+			motor[frontRight] = joystickLeftY;
+			motor[backRight] = joystickLeftY;
+		}
 	}
-	// tank driving (emergency case);
-	/*
-	motor[frontLeft] = joystickRightY;
-	motor[backLeft] = joystickRightY;
-	motor[frontRight] = joystickLeftY;
-	motor[backRight] = joystickLeftY;
-	*/
-
 }
 
 task collection()
@@ -128,7 +144,6 @@ task display()
 task main()
 {
 	startTask(drive);
-	//startTask(
 	startTask(collection);
 	startTask(display);
 	inputManager();
