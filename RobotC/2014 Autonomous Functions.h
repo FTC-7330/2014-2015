@@ -93,7 +93,7 @@ void turn(float degrees, int power)
 		power = turnPower(abs(targetHeading - degHeading), power);
 		if (targetHeading - degHeading > 0) // left turn
 		{
-			//drive(0.02, power, -power, false);
+			//drive(0.02, power, -power);
 			motor[backRight] = power;
 			motor[backLeft] = -power;
 			motor[frontRight] = power;
@@ -101,7 +101,7 @@ void turn(float degrees, int power)
 		}
 		else // right turn
 		{
-			//drive(0.02, -power, power, false);
+			//drive(0.02, -power, power);
 			motor[backRight] = -power;
 			motor[backLeft] = power;
 			motor[frontRight] = -power;
