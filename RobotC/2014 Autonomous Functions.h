@@ -83,12 +83,13 @@ void drive(int distanceTicks, int rightSpeed, int leftSpeed, bool runForever)
 	nMotorEncoder[frontRight] = 0;
 }
 
+// This takes in power and degree Distance and returns it as turn power
 int turnPower(float degDistance, int power) {
 	return (min((degDistance), 10) / 10) * (power - 15) + 15;
 }
 // power must be greater than 15
-// This method takes in an amount of degrees and power so
-// turn the robot at the given angle with the given power
+// This method takes in an amount of degrees and power so it
+// can turn the robot at the given angle with the given power
 void turn(float degrees, int power)
 {
 	float targetHeading = degHeading + degrees;
@@ -104,9 +105,9 @@ void turn(float degrees, int power)
 			motor[frontRight] = power;
 			motor[frontLeft] = -power;
 		}
-		else // right turn
+		else // Right turn
 		{
-			//drive(0.02, -power, power, false);
+			// drive(0.02, -power, power, false);
 			motor[backRight] = -power;
 			motor[backLeft] = power;
 			motor[frontRight] = -power;
@@ -122,7 +123,7 @@ void turn(float degrees, int power)
 
 
 
-// displays value of the IR sensor, the right and left encoders, and the sonar sensor
+// Displays value of the IR sensor, the right and left encoders, and the sonar sensor
 task display()
 {
     while (true)
@@ -138,7 +139,6 @@ task display()
 	  }
 }
 
-
 task printHeading()
 {
 	while(true)
@@ -147,7 +147,7 @@ task printHeading()
 		writeDebugStreamLine("Last Time: %d",  lastTime, time1[T1]);
 	}
 }
-//  Prints the Endoder Values on the NXT.
+// Prints the Endoder Values on the NXT.
 task printEncoderValues()
 {
 	while(true)
@@ -160,7 +160,7 @@ task printEncoderValues()
 		wait1Msec(500);
 	}
 }
-//continues driving until encoders reach destination, then resets motor speed.
+// Continues driving until encoders reach destination, then resets motor speed.
 void waitForStop()
 {
 	while(nMotorRunState[backRight] != runStateIdle && nMotorRunState[backLeft] != runStateIdle
@@ -173,7 +173,7 @@ void waitForStop()
 	motor[backLeft] = 0;
 	motor[frontRight] = 0;
 }
-//Initializes the Robot at the beginning of the match.
+// Initializes the Robot at the beginning of the match.
 void initializeRobot()
 {
 	ClearTimer(T1);
