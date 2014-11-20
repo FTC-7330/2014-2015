@@ -19,5 +19,6 @@
 task main()
 {
 	startTask(printEncoderValues);
-	//drive(8000, 70, 70, false);
+  drive(80, 70, 70);
+  //some credit to sarah but most of the credit to tyler
 }

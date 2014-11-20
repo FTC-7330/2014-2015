@@ -1,9 +1,5 @@
-#pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
-#pragma config(Sensor, S4,     gyro,           sensorI2CHiTechnicGyro)
-#pragma config(Motor,  mtr_S1_C1_1,     backRight,     tmotorTetrix, PIDControl, encoder)
-#pragma config(Motor,  mtr_S1_C1_2,     backLeft,      tmotorTetrix, PIDControl, reversed, encoder)
-#pragma config(Motor,  mtr_S1_C2_1,     frontRight,    tmotorTetrix, PIDControl, encoder)
-#pragma config(Motor,  mtr_S1_C2_2,     frontLeft,     tmotorTetrix, PIDControl, reversed, encoder)
+#include "3rd Party Driver Library\include\hitechnic-irseeker-v2.h"
+tHTIRS2 irSeeker;
 
 // Functions for Autonomous Methods
 // - display
@@ -25,18 +21,21 @@ long lastTime = 0;
 int currentVelocity;
 
 void waitForStop();
-void updateHeading()
+task updateHeading()
 {
-	currentVelocity = SensorValue[gyro] - initial; // gets the new sensor reading
-	degHeading = degHeading + ((currentVelocity) * (time1[T1] - lastTime) * .001); // modifies the header
-	lastTime = time1[T1]; // sets the last time for the next reading
-	if (time1[T1] > 30000) // this resets the timer after 30 seconds
+	while(true)
 	{
-		clearTimer(T1);
-		lastTime = 0;
+		currentVelocity = SensorValue[gyro] - initial; // gets the new sensor reading
+		degHeading = degHeading + ((currentVelocity) * (time1[T1] - lastTime) * .001); // modifies the header
+		lastTime = time1[T1]; // sets the last time for the next reading
+		if (time1[T1] > 30000) // this resets the timer after 30 seconds
+		{
+			clearTimer(T1);
+			lastTime = 0;
+		}
+		radHeading = degHeading / 180 * PI; // the heading expressed in radians
+		//wait1Msec(10); // lets other tasks run
 	}
-	radHeading = degHeading / 180 * PI; // the heading expressed in radians
-	//wait1Msec(10); // lets other tasks run
 }
 
 //It takes in two values and returns the minimum
@@ -54,9 +53,9 @@ int min(int a, int b)
 
 // reset encoder values; drives for the distance given at the given speed;
 //if runForever is true, drives forever
-void drive(int distanceTicks, int rightSpeed, int leftSpeed, bool runForever)
+void drive(int distanceInches, int rightSpeed, int leftSpeed)
 {
-	//int distanceTicks = (int)(distanceInches / 0.044879895);
+	int distanceTicks = (int)(distanceInches / 0.044879895);
 	nMotorEncoder[backRight] = 0;
 	nMotorEncoder[backLeft] = 0;
 	nMotorEncoder[frontRight] = 0;
@@ -72,10 +71,7 @@ void drive(int distanceTicks, int rightSpeed, int leftSpeed, bool runForever)
 	motor[frontRight] = rightSpeed;
 	motor[frontLeft] = leftSpeed;
 
-	if (!runForever) //stops when target is reached.
-	{
-		waitForStop();
-	}
+	waitForStop();
 
 	nMotorEncoder[frontLeft] = 0;
 	nMotorEncoder[backRight] = 0;
@@ -95,11 +91,10 @@ void turn(float degrees, int power)
 	float targetHeading = degHeading + degrees;
 	while (abs(targetHeading - degHeading) > .25)
 	{
-		updateHeading();
 		power = turnPower(abs(targetHeading - degHeading), power);
 		if (targetHeading - degHeading > 0) // left turn
 		{
-			//drive(0.02, power, -power, false);
+			//drive(0.02, power, -power);
 			motor[backRight] = power;
 			motor[backLeft] = -power;
 			motor[frontRight] = power;
@@ -107,7 +102,7 @@ void turn(float degrees, int power)
 		}
 		else // Right turn
 		{
-			// drive(0.02, -power, power, false);
+			//drive(0.02, -power, power);
 			motor[backRight] = -power;
 			motor[backLeft] = power;
 			motor[frontRight] = -power;
@@ -184,4 +179,57 @@ void initializeRobot()
 		wait1Msec(1);
 	}
 	initial = sum / 100;
+
+	initSensor(&irSeeker, S1);
+}
+
+void approachIR()
+{
+	if (irSeeker.acValues[2] > irSeeker.acValues[1])
+	{
+		motor[frontRight] = 50;
+		motor[frontLeft] = -50;
+		motor[backRight] = 50;
+		motor[backLeft] = -50;
+	}
+	else
+	{
+		motor[frontRight] = -50;
+		motor[frontLeft] = 50;
+		motor[backRight] = -50;
+		motor[backLeft] = 50;
+	}
+
+	while (irSeeker.acValues[1] - irSeeker.acValues[2] != 0)
+	{
+	}
+
+	motor[frontRight] = 0;
+	motor[frontLeft] = 0;
+	motor[backRight] = 0;
+	motor[backLeft] = 0;
+
+	int d;
+	int p;
+	int i;
+	int rSpeed, lSpeed = 50;
+
+	motor[frontRight] = rSpeed;
+	motor[frontLeft] = lSpeed;
+	motor[backRight] = rSpeed;
+	motor[backLeft] = lSpeed;
+
+	while (false) //condition needs to be if touchSensor returns True or False. Look up syntax later
+	{
+		d = irSeeker.dcValues[1] - irSeeker.dcValues[2];
+		p = d;
+		i += 0.01*d;
+		rSpeed += 1*p + 2*i; //1 is a filler for constant k1, 2 is a filler for constant k2
+		lSpeed -= 1*p +2*i;
+		motor[frontRight] = rSpeed;
+  	motor[frontLeft] = lSpeed;
+		motor[backRight] = rSpeed;
+		motor[backLeft] = lSpeed;
+		wait1Msec(10);
+	}
 }

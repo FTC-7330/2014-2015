@@ -77,10 +77,10 @@ task drive()
 	// think about implementing dampening and quadratic shifting
 	while(true)
 	{
-		motor[frontLeft] = (joystickLeftY - joystickRightX + joystickLeftX)*100/125;
-		motor[backLeft] =  (joystickLeftY - joystickRightX - joystickLeftX)*100/125;
-		motor[frontRight] = (joystickLeftY + joystickRightX - joystickLeftX)*100/125;
-		motor[backRight] = (joystickLeftY + joystickRightX + joystickLeftX) *100/125;
+		motor[frontLeft] = (joystickLeftY - joystickRightX + joystickLeftX)*100/127;
+		motor[backLeft] =  (joystickLeftY - joystickRightX - joystickLeftX)*100/127;
+		motor[frontRight] = (joystickLeftY + joystickRightX - joystickLeftX)*100/127;
+		motor[backRight] = (joystickLeftY + joystickRightX + joystickLeftX) *100/127;
 	}
 	// tank driving (emergency case);
 	/*
@@ -128,6 +128,7 @@ task display()
 task main()
 {
 	startTask(drive);
+	//startTask(
 	startTask(collection);
 	startTask(display);
 	inputManager();
