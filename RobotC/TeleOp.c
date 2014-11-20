@@ -25,6 +25,8 @@ int joystickRightX;
 int joystickLeftY;
 int joystickRightY;
 bool isMecanum = true;
+bool isCollectorRunning = false;
+bool isShooterRunning = true;
 
 bool aPressed;
 bool bPressed;
@@ -57,9 +59,10 @@ int checkDeadZone(int joystickValue)
 
 void inputManager()
 {
-	startJoyONEIsPressed = false;
-	startJoyONEWasPressed = false;
-
+	bool startJoyONEIsPressed = false;
+	bool startJoyONEWasPressed = false;
+	bool startJoyTWOIsPressed = false;
+	bool startJoyTWOWasPressed = false;
 	while(true)
 	{
 			getJoystickSettings(joystick);
@@ -67,9 +70,15 @@ void inputManager()
 			aPressed = (joy1Btn(BUTTON_A)==1);
 
 			startJoyONEIsPressed = (joy1Btn(BUTTON_START)==1);
+			startJoyTWOIsPressed = (joy2Btn(BUTTON_START)==1);
 			if(startJoyONEIsPressed&&!startJoyONEWasPressed)
 			{
 				isMecanum = !isMecanum;
+			}
+
+			if(startJoyTWOIsPressed&&!startJoyTWOWasPressed)
+			{
+				isCollectorRunning = !isCollectorRunning
 			}
 
 			joystickRightY = checkDeadZone(-joystick.joy1_y2);
@@ -78,6 +87,7 @@ void inputManager()
 			joystickLeftX = checkDeadZone(joystick.joy1_x1);
 
 			startJoyONEWasPressed = startJoyONEIsPressed;
+			startJoyTWOWasPressed = startJoyTWOIsPressed;
 	}
 }
 
