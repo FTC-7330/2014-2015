@@ -185,22 +185,13 @@ void initializeRobot()
 
 void approachIR()
 {
-	if (irSeeker.acValues[2] > irSeeker.acValues[1])
-	{
-		motor[frontRight] = 50;
-		motor[frontLeft] = -50;
-		motor[backRight] = 50;
-		motor[backLeft] = -50;
-	}
-	else
-	{
-		motor[frontRight] = -50;
-		motor[frontLeft] = 50;
-		motor[backRight] = -50;
-		motor[backLeft] = 50;
-	}
+	motor[frontRight] = -50;
+	motor[frontLeft] = 50;
+	motor[backRight] = -50;
+	motor[backLeft] = 50;
 
-	while (irSeeker.acValues[1] - irSeeker.acValues[2] != 0)
+
+	while (irSeeker.acValues[1] > 40 && irSeeker.acValues[2] > 40 && abs(irSeeker.acValues[2] - irSeeker.acValues[1]) > 20) //Ruthie's while loop
 	{
 	}
 
