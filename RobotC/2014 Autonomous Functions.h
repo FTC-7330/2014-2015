@@ -185,13 +185,13 @@ void initializeRobot()
 
 void approachIR()
 {
-	motor[frontRight] = -50;
-	motor[frontLeft] = 50;
-	motor[backRight] = -50;
-	motor[backLeft] = 50;
+	motor[frontRight] = -30;
+	motor[frontLeft] = 30;
+	motor[backRight] = -30;
+	motor[backLeft] = 30;
 
 
-	while (irSeeker.acValues[1] > 40 && irSeeker.acValues[2] > 40 && abs(irSeeker.acValues[2] - irSeeker.acValues[1]) > 20) //Ruthie's while loop
+	while (irSeeker.acValues[1] < 40 || irSeeker.acValues[2] < 40 || abs(irSeeker.acValues[2] - irSeeker.acValues[1]) > 10) //Ruthie's while loop
 	{
 	}
 
@@ -200,6 +200,31 @@ void approachIR()
 	motor[backRight] = 0;
 	motor[backLeft] = 0;
 
+	while(nxt button is not pressed)
+	{
+		motor[frontRight] = 30;
+		motor[frontLeft] = 30;
+		motor[backRight] = 30;
+		motor[backLeft] = 30;
+
+		if((irSeeker.acValues[1]+15) < irSeeker.acValues[2])
+		{
+			motor[frontRight] = 28;
+			motor[backRight] = 28;
+		}
+		if((irSeeker.acValues[1]-15) > irSeeker.acValues[2])
+		{
+			motor[frontLeft] = 28;
+			motor[backLeft] = 28;
+		}
+		wait1Msec(10);
+	}
+	motor[frontRight] = 0;
+	motor[frontLeft] = 0;
+	motor[backRight] = 0;
+	motor[backLeft] = 0;
+
+	/*
 	int d;
 	int p;
 	int i;
@@ -209,6 +234,7 @@ void approachIR()
 	motor[frontLeft] = lSpeed;
 	motor[backRight] = rSpeed;
 	motor[backLeft] = lSpeed;
+	*/
 
 	while (false) //condition needs to be if touchSensor returns True or False. Look up syntax later
 	{
