@@ -63,14 +63,25 @@ void inputManager()
 	bool startJoyONEWasPressed = false;
 	bool startJoyTWOIsPressed = false;
 	bool startJoyTWOWasPressed = false;
+	bool lbJoyTWOWasPressed = false;
+	bool lbJoyTWOIsPressed = false;
+	bool rbJoyTWOIsPressed = false;
+	bool rbJoyTWOWasPressed = false;
+
 	while(true)
 	{
 			getJoystickSettings(joystick);
 			bPressed = (joy1Btn(BUTTON_B)==1);
 			aPressed = (joy1Btn(BUTTON_A)==1);
 
-			startJoyONEIsPressed = (joy1Btn(BUTTON_START)==1);
-			startJoyTWOIsPressed = (joy2Btn(BUTTON_START)==1);
+			//Joystick 1 Booleans
+			startJoyONEIsPressed = (joy1Btn(START_BUTTON)==1);
+
+			//Joystick 2 Booleans
+			rbJoyTWOIsPressed = (joy2Btn(RIGHT_BUTTON)==1);
+			lbJoyTWOIsPressed = (joy2Btn(LEFT_BUTTON)==1);
+			startJoyTWOIsPressed = (joy2Btn(START_BUTTON)==1);
+
 			if(startJoyONEIsPressed&&!startJoyONEWasPressed)
 			{
 				isMecanum = !isMecanum;
@@ -78,7 +89,12 @@ void inputManager()
 
 			if(startJoyTWOIsPressed&&!startJoyTWOWasPressed)
 			{
-				isCollectorRunning = !isCollectorRunning
+				isCollectorRunning = !isCollectorRunning;
+			}
+
+			if((lbJoyTWOIsPressed&&!lbJoyTWOWasPressed)&&(rbJoyTWOIsPressed&&!rbJoyTWOWasPressed))
+			{
+				isShooterRunning = !isShooterRunning;
 			}
 
 			joystickRightY = checkDeadZone(-joystick.joy1_y2);
@@ -88,6 +104,8 @@ void inputManager()
 
 			startJoyONEWasPressed = startJoyONEIsPressed;
 			startJoyTWOWasPressed = startJoyTWOIsPressed;
+			rbJoyTWOWasPressed = rbJoyTWOIsPressed;
+			lbJoyTWOWasPressed = lbJoyTWOIsPressed;
 	}
 }
 
