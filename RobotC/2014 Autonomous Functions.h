@@ -198,68 +198,31 @@ void initializeRobot()
 
 void approachIR()
 {
-	motor[frontRight] = -30;
-	motor[frontLeft] = 30;
-	motor[backRight] = -30;
-	motor[backLeft] = 30;
+	int leftSpeed = 30;
+	int rightSpeed = 30;
+	int speedDelta = 2;
+	tankDrive(leftSpeed, -rightSpeed);
 
-
-	while (irSeeker.acValues[1] < 40 || irSeeker.acValues[2] < 40 || abs(irSeeker.acValues[2] - irSeeker.acValues[1]) > 10) //Ruthie's while loop
+	while (irSeeker.acValues[1] < 20 || irSeeker.acValues[2] < 20 || abs(irSeeker.acValues[2] - irSeeker.acValues[1]) > 10) //Ruthie's while loop
 	{
 	}
+	tankDrive(0, 0);
 
-	motor[frontRight] = 0;
-	motor[frontLeft] = 0;
-	motor[backRight] = 0;
-	motor[backLeft] = 0;
-
-	while(nxt button is not pressed)
+	while(SensorValue(touchSensor) == 0)
 	{
-		motor[frontRight] = 30;
-		motor[frontLeft] = 30;
-		motor[backRight] = 30;
-		motor[backLeft] = 30;
+		tankDrive(leftSpeed, rightSpeed);
 
-		if((irSeeker.acValues[1]+15) < irSeeker.acValues[2])
+		if((irSeeker.acValues[1]+15) < irSeeker.acValues[2]) //if 2 gets a higher signal, drive towards it
 		{
-			motor[frontRight] = 28;
-			motor[backRight] = 28;
+			motor[frontRight] = rightSpeed - speedDelta;
+			motor[backRight] = rightSpeed - speedDelta;
 		}
-		if((irSeeker.acValues[1]-15) > irSeeker.acValues[2])
+		if((irSeeker.acValues[2]+15) < irSeeker.acValues[1]) //if 1 gets a higher signal, drive towards it
 		{
-			motor[frontLeft] = 28;
-			motor[backLeft] = 28;
+			motor[frontLeft] = rightSpeed - speedDelta;
+			motor[backLeft] = rightSpeed - speedDelta;
 		}
 		wait1Msec(10);
 	}
-	motor[frontRight] = 0;
-	motor[frontLeft] = 0;
-	motor[backRight] = 0;
-	motor[backLeft] = 0;
-
-	/*
-	int d;
-	int p;
-	int i;
-	int rSpeed, lSpeed = 50;
-
-	motor[frontRight] = rSpeed;
-	motor[frontLeft] = lSpeed;
-	motor[backRight] = rSpeed;
-	motor[backLeft] = lSpeed;
-	*/
-
-	while (false) //condition needs to be if touchSensor returns True or False. Look up syntax later
-	{
-		d = irSeeker.dcValues[1] - irSeeker.dcValues[2];
-		p = d;
-		i += 0.01*d;
-		rSpeed += 1*p + 2*i; //1 is a filler for constant k1, 2 is a filler for constant k2
-		lSpeed -= 1*p +2*i;
-		motor[frontRight] = rSpeed;
-  	motor[frontLeft] = lSpeed;
-		motor[backRight] = rSpeed;
-		motor[backLeft] = lSpeed;
-		wait1Msec(10);
-	}
+	tankDrive(0, 0);
 }
