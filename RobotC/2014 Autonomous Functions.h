@@ -208,7 +208,7 @@ void approachIR()
 	}
 	tankDrive(0, 0);
 
-	while(SensorValue(touchSensor) == 0)
+	while(false)
 	{
 		tankDrive(leftSpeed, rightSpeed);
 

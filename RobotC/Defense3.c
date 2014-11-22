@@ -18,7 +18,11 @@
 
 task main()
 {
-	startTask(printEncoderValues);
-  drive(80, 70, 70);
-  //some credit to sarah but most of the credit to rohan :)
+	Drive(48, 90, 90);
+	Turn(90, 90);
+	Drive(21, 90, 90);
+	Turn(-45, 90);
+	Drive(30, 90, 90);
+	Turn(45, 90);
+	Drive(20, 90, 90);
 }
