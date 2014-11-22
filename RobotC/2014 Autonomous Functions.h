@@ -28,18 +28,26 @@ task updateHeading()
 		currentVelocity = SensorValue[gyro] - initial; // gets the new sensor reading
 		degHeading = degHeading + ((currentVelocity) * (time1[T1] - lastTime) * .001); // modifies the header
 		lastTime = time1[T1]; // sets the last time for the next reading
-		if (time1[T1] > 30000) // this resets the timer after 30 seconds
-		{
-			clearTimer(T1);
-			lastTime = 0;
-		}
 		radHeading = degHeading / 180 * PI; // the heading expressed in radians
-		//wait1Msec(10); // lets other tasks run
+		//wait1Msec(10); consider uncommenting this line
 	}
 }
 
 //It takes in two values and returns the minimum
 int min(int a, int b)
+{
+	if (a < b)
+	{
+		return a;
+	}
+	else
+	{
+		return b;
+	}
+}
+
+//It takes in two values and returns the minimum
+float floatMin(float a, float b)
 {
 	if (a < b)
 	{
@@ -80,13 +88,22 @@ void drive(int distanceInches, int rightSpeed, int leftSpeed)
 }
 
 // This takes in power and degree Distance and returns it as turn power
-int turnPower(float degDistance, int power) {
-	return (min((degDistance), 10) / 10) * (power - 15) + 15;
+int turnPower(float degDistance, int maxPower) {
+	return (floatMin(degDistance, 10) / 10.0) * (maxPower - 15) + 15;
 }
+
+void tankDrive(int left, int right)
+{
+	motor[backRight] = right;
+	motor[backLeft] = left;
+	motor[frontRight] = right;
+	motor[frontLeft] = left;
+}
+
 // power must be greater than 15
 // This method takes in an amount of degrees and power so it
 // can turn the robot at the given angle with the given power
-void turn(float degrees, int power)
+void turn(float degrees, int power)// power is always positive. degrees is positive or negative
 {
 	float targetHeading = degHeading + degrees;
 	while (abs(targetHeading - degHeading) > .25)
@@ -95,18 +112,12 @@ void turn(float degrees, int power)
 		if (targetHeading - degHeading > 0) // left turn
 		{
 			//drive(0.02, power, -power);
-			motor[backRight] = power;
-			motor[backLeft] = -power;
-			motor[frontRight] = power;
-			motor[frontLeft] = -power;
+			tankDrive(-power, power); //drive left at -power and right at power
 		}
 		else // Right turn
 		{
 			//drive(0.02, -power, power);
-			motor[backRight] = -power;
-			motor[backLeft] = power;
-			motor[frontRight] = -power;
-			motor[frontLeft] = power;
+			tankDrive(power, -power); // drive left at power and right at -power
 		}
 
 	}
@@ -169,10 +180,11 @@ void waitForStop()
 	motor[frontRight] = 0;
 }
 // Initializes the Robot at the beginning of the match.
+//!!!!!!!!!!!!!!!!!!!***********************needs to be called in order for robot to work********************************!!!!!!!!!!!!
 void initializeRobot()
 {
 	ClearTimer(T1);
-
+	startTask(updateHeading);
 	int sum = 0;
 	for (int i = 0; i < 100; i++) {
 		sum += SensorValue[gyro];
@@ -181,6 +193,7 @@ void initializeRobot()
 	initial = sum / 100;
 
 	initSensor(&irSeeker, S1);
+	//gyro initialize?
 }
 
 void approachIR()

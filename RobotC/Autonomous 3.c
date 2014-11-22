@@ -5,8 +5,11 @@
 #pragma config(Motor,  mtr_S1_C2_1,     frontRight,    tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C2_2,     frontLeft,     tmotorTetrix, PIDControl, reversed, encoder)
 
+#include "2014 Autonomous Functions.h"
+
 task main()
 {
+	initializeRobot();
 drive(x);
 if (IR sensor reads that IR is ahead)
 	approach IR;
@@ -28,13 +31,3 @@ if (IR sensor reads that IR is ahead)
 
 
 }
-
-//approach IR
-
-while(IR != straight)
-	turn(some direction)
-
-driveNoWait;
-while(touchSensor != down) {}
-stop;
-drive(-x)

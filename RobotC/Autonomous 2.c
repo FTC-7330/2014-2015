@@ -22,14 +22,13 @@ task main()
 {
 	//waitForStart();
 	initializeRobot();
-	startTask(updateHeading);
 	startTask(printHeading);
 
 	//drive off the ramp backwards towards the 60cm rolling goal
 		drive(-58, 20, 20)//drive backwards 58 power 20
 		drive(-54, 50, 50)//drive backwards 54 inches power 50
 
-	//capture 60cm rolling goal
+	//capture 60cm rolling gwait10Msec
 		motor[camMotor] = 10;//move goal grabbing device to capture the goal
 		wait1Msec(200);
 		motor[camMotor] = 0;
