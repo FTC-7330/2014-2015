@@ -1,5 +1,4 @@
-	#pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTMotor)
-#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
+#pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTMotor)
 #pragma config(Sensor, S3,     irSensor,       sensorHiTechnicIRSeeker600)
 #pragma config(Sensor, S4,     gyro,           sensorI2CHiTechnicGyro)
 #pragma config(Motor,  mtr_S1_C1_1,     motorD,        tmotorTetrix, PIDControl, encoder)
@@ -163,7 +162,7 @@ task Collection()
 {
 	while(true)
 	{
-		if(isCamUp)
+		if(joy2Btn(5)==1)
 		{
 			motor[camMotor] = 50;
 			/*if(nMotorEncoder[camMotor] < 1440)
@@ -175,7 +174,7 @@ task Collection()
 				 motor[camMotor] = 0;
 			}*/
 		}
-		else
+		else if(joy2Btn(6)==1)
 		{
 			motor[camMotor] = -50
 			/*if(nMotorEncoder[camMotor] > 0)
@@ -186,6 +185,19 @@ task Collection()
 			{
 				motor[camMotor] = 0;
 			}*/
+		}
+		else
+		{
+			motor[camMotor] = 0;
+		}
+
+		if(isCollectorRunning)
+		{
+			motor[collectionMotor] = 50;
+		}
+		else
+		{
+			motor[collectionMotor] = 0;
 		}
 	}
 
