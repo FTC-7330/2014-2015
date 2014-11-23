@@ -36,13 +36,13 @@ task main()
 
 	//put the balls into the rolling goal
 		drive(1, 20, 20);//drive forward to secure the goal
-		motor[liftingMotor] = 30;//drive the motor to raise the arm
+		/*motor[liftingMotor] = 30;//drive the motor to raise the arm
 		wait1Msec(500);
 		motor[liftingMotor] = 0;
 		wait1Msec(100);
 		motor[ballReleaseMotor] = 30;//spin the motor to release the balls
 		wait1Msec(200);
-		motor[ballReleaseMotor] = 0;
+		motor[ballReleaseMotor] = 0;*/
 
 	//drive to the scoring area
 		turn(-90, 50);//turn 90 degrees left

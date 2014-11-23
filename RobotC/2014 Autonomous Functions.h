@@ -28,6 +28,13 @@ task updateHeading()
 		currentVelocity = SensorValue[gyro] - initial; // gets the new sensor reading
 		degHeading = degHeading + ((currentVelocity) * (time1[T1] - lastTime) * .001); // modifies the header
 		lastTime = time1[T1]; // sets the last time for the next reading
+
+		if(time1[T1] > 30000)
+		{
+			time1[T1] = 0;
+			lastTime = 0;
+		}
+
 		radHeading = degHeading / 180 * PI; // the heading expressed in radians
 		//wait1Msec(10); consider uncommenting this line
 	}
