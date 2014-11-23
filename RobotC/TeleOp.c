@@ -1,4 +1,4 @@
-#pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTMotor)
+	#pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTMotor)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S3,     irSensor,       sensorHiTechnicIRSeeker600)
 #pragma config(Sensor, S4,     gyro,           sensorI2CHiTechnicGyro)
@@ -165,7 +165,7 @@ task Collection()
 	{
 		if(isCamUp)
 		{
-			if(nMotorEncoder[camMotor]>1440)
+			if(nMotorEncoder[camMotor] < 1440)
 			{
 				motor[camMotor] = 50;
 			}
@@ -193,15 +193,15 @@ task Display()
 {
 	while(true)
 	{
-		int irSensorValue = irSensor;
-		nxtDisplayString(1, "InfaRed: %d       ", irSensorValue);
+		writeDebugStreamLine("isCamUp: %d", isCamUp);
+		writeDebugStreamLine("Cam Motor Encoder: %d",  nMotorEncoder[camMotor]);
 	}
 }
 
 task main()
 {
 	startTask(Drive);
-	//startTask(Collection);
-	//startTask(Display);
+	startTask(Collection);
+	startTask(Display);
 	inputManager();
 }
