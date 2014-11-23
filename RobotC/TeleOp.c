@@ -165,25 +165,27 @@ task Collection()
 	{
 		if(isCamUp)
 		{
-			if(nMotorEncoder[camMotor] < 1440)
+			motor[camMotor] = 50;
+			/*if(nMotorEncoder[camMotor] < 1440)
 			{
 				motor[camMotor] = 50;
 			}
 			else
 			{
 				 motor[camMotor] = 0;
-			}
+			}*/
 		}
 		else
 		{
-			if(nMotorEncoder[camMotor] > 0)
+			motor[camMotor] = -50
+			/*if(nMotorEncoder[camMotor] > 0)
 			{
 				motor[camMotor] = -50;
 			}
 			else
 			{
 				motor[camMotor] = 0;
-			}
+			}*/
 		}
 	}
 
