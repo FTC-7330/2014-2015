@@ -115,7 +115,7 @@ void turn(float degrees, int power)// power is always positive. degrees is posit
 	float targetHeading = degHeading + degrees;
 	while (abs(targetHeading - degHeading) > .25)
 	{
-		power = turnPower(abs(targetHeading - degHeading), power);
+		//power = turnPower(abs(targetHeading - degHeading), power);
 		if (targetHeading - degHeading > 0) // left turn
 		{
 			//drive(0.02, power, -power);
@@ -158,6 +158,11 @@ task printHeading()
 	{
 		writeDebugStreamLine("Time: %d", time1[T1]);
 		writeDebugStreamLine("Last Time: %d",  lastTime, time1[T1]);
+		writeDebugStreamLine("Deg Heading: %d", degHeading);
+		writeDebugStreamLine("Initial: %d", initial);
+		writeDebugStreamLine("Angular Velocity: %d", SensorValue[gyro] - initial);
+		writeDebugStreamLine("----------------------------");
+		wait1Msec(200);
 	}
 }
 // Prints the Endoder Values on the NXT.
@@ -200,6 +205,7 @@ void initializeRobot()
 	initial = sum / 100;
 
 	initSensor(&irSeeker, S1);
+	return;
 	//gyro initialize?
 }
 
