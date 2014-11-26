@@ -176,7 +176,7 @@ task Collection()
 		}
 		else if(joy2Btn(6)==1)
 		{
-			motor[camMotor] = -50
+			motor[camMotor] = -50;
 			/*if(nMotorEncoder[camMotor] > 0)
 			{
 				motor[camMotor] = -50;
