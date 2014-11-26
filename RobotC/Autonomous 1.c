@@ -16,10 +16,6 @@
 task main()
 {
 	//waitForStart();
-	while (true)
-	{
-  	motor[backRight] = 90;
-	}
-  	//drive(80, 70, 70);
+  drive(80, 70, 70);
   //some credit to sarah but most of the credit to rohan :)
 }
