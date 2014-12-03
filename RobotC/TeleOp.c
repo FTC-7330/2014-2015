@@ -61,6 +61,17 @@ int checkDeadZone(int joystickValue)
 	}
 }
 
+int scaleJoystickValues(int joystickValue)
+{
+	if(joystickValue>0)
+	{
+		return (int)((joystickValue*joystickValue)*.0062);
+	}
+	else
+	{
+		return (int)(-(joystickValue*joystickValue)*.0062);
+	}
+}
 void inputManager()
 {
 
