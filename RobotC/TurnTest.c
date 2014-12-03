@@ -15,8 +15,17 @@
 task main()
 {
 	startTask(printHeading);
-	Drive(15, 30, 30);
-	Turn(45, 30);
+	initializeRobot();
+	drive(15, 30, 30);
+
+	wait1Msec(500);
+
+	for (int i = 0; i < 4; i++)
+	{
+		turn(-90, 50);
+		wait1Msec(500);
+	}
+
 	//Turn(35, 50);
 	//Turn(-360, 90);
 }

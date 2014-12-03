@@ -15,7 +15,9 @@
 
 task main()
 {
-	//waitForStart();
+	//waitForStart()
+	initializeRobot();
+	//int k = SensorValue[gyro];
   drive(80, 70, 70);
   //some credit to sarah but most of the credit to rohan :)
 }

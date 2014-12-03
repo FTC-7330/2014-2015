@@ -19,6 +19,7 @@ float initial;
 float radHeading;
 long lastTime = 0;
 int currentVelocity;
+float targetHeading;
 
 void waitForStop();
 task updateHeading()
@@ -36,7 +37,7 @@ task updateHeading()
 		}
 
 		radHeading = degHeading / 180 * PI; // the heading expressed in radians
-		//wait1Msec(10); consider uncommenting this line
+		wait1Msec(5);
 	}
 }
 
@@ -96,7 +97,7 @@ void drive(int distanceInches, int rightSpeed, int leftSpeed)
 
 // This takes in power and degree Distance and returns it as turn power
 int turnPower(float degDistance, int maxPower) {
-	return (floatMin(degDistance, 10) / 10.0) * (maxPower - 15) + 15;
+	return (floatMin(degDistance, 15.0) / 15.0) * (maxPower - 10) + 10;
 }
 
 void tankDrive(int left, int right)
@@ -112,22 +113,26 @@ void tankDrive(int left, int right)
 // can turn the robot at the given angle with the given power
 void turn(float degrees, int power)// power is always positive. degrees is positive or negative
 {
-	float targetHeading = degHeading + degrees;
-	while (abs(targetHeading - degHeading) > .25)
+	targetHeading = degHeading + degrees;
+	while (abs(targetHeading - degHeading) > 2)
 	{
-		//power = turnPower(abs(targetHeading - degHeading), power);
-		if (targetHeading - degHeading > 0) // left turn
+		while (abs(targetHeading - degHeading) > 2)
 		{
-			//drive(0.02, power, -power);
-			tankDrive(-power, power); //drive left at -power and right at power
+			power = turnPower(abs(targetHeading - degHeading), power);
+			if (targetHeading - degHeading > 0) // left turn
+			{
+				//drive(0.02, power, -power);
+				tankDrive(power, -power); //drive left at -power and right at power
+			}
+			else // Right turn
+			{
+				//drive(0.02, -power, power);
+				tankDrive(-power, power); // drive left at power and right at -power
+			}
 		}
-		else // Right turn
-		{
-			//drive(0.02, -power, power);
-			tankDrive(power, -power); // drive left at power and right at -power
-		}
-
+		wait10Msec(10);
 	}
+
 	motor[backRight] = 0;
 	motor[backLeft] = 0;
 	motor[frontRight] = 0;
@@ -142,7 +147,7 @@ task display()
     while (true)
     {
     	//Displays information about encoders and IR and sonar sensors
-			int freftEncoder = nMotorEncoder[backLeft];
+			int leftEncoder = nMotorEncoder[backLeft];
 			int rightEncoder = nMotorEncoder[backRight];
 
 			nxtDisplayString(1,"back left: %d", nMotorEncoder[backLeft]);
@@ -159,6 +164,7 @@ task printHeading()
 		writeDebugStreamLine("Time: %d", time1[T1]);
 		writeDebugStreamLine("Last Time: %d",  lastTime, time1[T1]);
 		writeDebugStreamLine("Deg Heading: %d", degHeading);
+		writeDebugStreamLine("Target Heading: %d", targetHeading);
 		writeDebugStreamLine("Initial: %d", initial);
 		writeDebugStreamLine("Angular Velocity: %d", SensorValue[gyro] - initial);
 		writeDebugStreamLine("----------------------------");
@@ -196,15 +202,14 @@ void waitForStop()
 void initializeRobot()
 {
 	ClearTimer(T1);
-	startTask(updateHeading);
 	int sum = 0;
 	for (int i = 0; i < 100; i++) {
 		sum += SensorValue[gyro];
 		wait1Msec(1);
 	}
 	initial = sum / 100;
-
-	initSensor(&irSeeker, S1);
+	startTask(updateHeading);
+	//initSensor(&irSeeker, S1);
 	return;
 	//gyro initialize?
 }
