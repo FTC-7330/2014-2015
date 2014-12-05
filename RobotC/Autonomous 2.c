@@ -22,14 +22,13 @@ task main()
 {
 	//waitForStart();
 	initializeRobot();
-	startTask(updateHeading);
 	startTask(printHeading);
 
 	//drive off the ramp backwards towards the 60cm rolling goal
 		drive(-58, 20, 20)//drive backwards 58 power 20
 		drive(-54, 50, 50)//drive backwards 54 inches power 50
 
-	//capture 60cm rolling goal
+	//capture 60cm rolling gwait10Msec
 		motor[camMotor] = 10;//move goal grabbing device to capture the goal
 		wait1Msec(200);
 		motor[camMotor] = 0;
@@ -37,13 +36,13 @@ task main()
 
 	//put the balls into the rolling goal
 		drive(1, 20, 20);//drive forward to secure the goal
-		motor[liftingMotor] = 30;//drive the motor to raise the arm
+		/*motor[liftingMotor] = 30;//drive the motor to raise the arm
 		wait1Msec(500);
 		motor[liftingMotor] = 0;
 		wait1Msec(100);
 		motor[ballReleaseMotor] = 30;//spin the motor to release the balls
 		wait1Msec(200);
-		motor[ballReleaseMotor] = 0;
+		motor[ballReleaseMotor] = 0;*/
 
 	//drive to the scoring area
 		turn(-90, 50);//turn 90 degrees left
