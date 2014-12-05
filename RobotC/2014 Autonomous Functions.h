@@ -91,7 +91,7 @@ void turn(float degrees, int power)
 	float targetHeading = degHeading + degrees;
 	while (abs(targetHeading - degHeading) > .25)
 	{
-		power = turnPower(abs(targetHeading - degHeading), power);
+		power = turnPower(abs(targetHeading - degHeading), power); //Power is always positive
 		if (targetHeading - degHeading > 0) // left turn
 		{
 			//drive(0.02, power, -power);
