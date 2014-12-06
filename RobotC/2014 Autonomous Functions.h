@@ -14,14 +14,14 @@ tHTIRS2 irSeeker;
 // left competition value: ????
 
 
-float degHeading;
-float initial;
-float radHeading;
-long lastTime = 0;
-int currentVelocity;
+float degHeading; // the direction that we are heading
+float initial; // initial gyro reading
+float radHeading; // degnheading in radians
+long lastTime = 0; // the last time
+int currentVelocity; // the current velocity
 
 void waitForStop();
-task updateHeading()
+task updateHeading() // updates the heading
 {
 	while(true)
 	{
@@ -55,24 +55,25 @@ int min(int a, int b)
 //if runForever is true, drives forever
 void drive(int distanceInches, int rightSpeed, int leftSpeed)
 {
-	int distanceTicks = (int)(distanceInches / 0.044879895);
+	int distanceTicks = (int)(distanceInches / 0.044879895); // puts the inputted distance into ticks
+	//sets motors to 0
 	nMotorEncoder[backRight] = 0;
 	nMotorEncoder[backLeft] = 0;
 	nMotorEncoder[frontRight] = 0;
 	nMotorEncoder[frontLeft] = 0;
-
+	//sets the encoder targets to the distance we want to go forward
 	nMotorEncoderTarget[backRight] = distanceTicks;
 	nMotorEncoderTarget[backLeft] = distanceTicks;
 	nMotorEncoderTarget[frontRight] = distanceTicks;
 	nMotorEncoderTarget[frontLeft] = distanceTicks;
-
+	//sets the speed of the motors
 	motor[backRight] = rightSpeed;
 	motor[backLeft] = leftSpeed;
 	motor[frontRight] = rightSpeed;
 	motor[frontLeft] = leftSpeed;
 
-	waitForStop();
-
+	waitForStop(); // waits until we are done turning
+	//stops the motors
 	nMotorEncoder[frontLeft] = 0;
 	nMotorEncoder[backRight] = 0;
 	nMotorEncoder[backLeft] = 0;
@@ -185,6 +186,7 @@ void initializeRobot()
 
 void approachIR()
 {
+	/*
 	motor[frontRight] = -30;
 	motor[frontLeft] = 30;
 	motor[backRight] = -30;
@@ -199,8 +201,9 @@ void approachIR()
 	motor[frontLeft] = 0;
 	motor[backRight] = 0;
 	motor[backLeft] = 0;
+	*/
 
-	while(nxt button is not pressed)
+	while(switch on prototyping board is not pressed)
 	{
 		motor[frontRight] = 30;
 		motor[frontLeft] = 30;
@@ -234,7 +237,7 @@ void approachIR()
 	motor[frontLeft] = lSpeed;
 	motor[backRight] = rSpeed;
 	motor[backLeft] = lSpeed;
-	*/
+
 
 	while (false) //condition needs to be if touchSensor returns True or False. Look up syntax later
 	{
@@ -249,4 +252,5 @@ void approachIR()
 		motor[backLeft] = lSpeed;
 		wait1Msec(10);
 	}
+	*/
 }
