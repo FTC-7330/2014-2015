@@ -10,29 +10,37 @@
 
 task main()
 {
-	int x = 23;
-	initializeRobot();
-	drive(x);
-
-	if (irSeeker.acValues[1] > 10 && irSeeker.acValues[2] > 10)
+	int beaconPosition = getBeaconPosition();
+	if(beaconPosition == 3)
+	{
 		approachIR();
-	else
-  {
-		turn(-x);
+		//lift thing (credit to brian)
+		//drop the balls in the center goal
+	}
+	else if(beaconPosition == 2)
+	{
 		drive(x);
-		turn(x);
+		turn(-90, 30);
 		drive(x);
-  }
-
-	if (irSeeker.acValues[3] > 10 && irSeeker.acValues[4] > 10)
+		turn(60, 30);
+		drive(x);
+		turn(90);
 		approachIR();
-
-	else
-  {
+		//lift thing (credit to brian)
+		//drop the balls in the center goal
+	}
+	else // beacon position 1
+	{
 		drive(x);
-		turn(x);
+		turn(-90, 30);
 		drive(x);
+		turn(60, 30);
+		drive(x);
+		turn(30, 30);
+		drive(x);
+		turn(90, 30);
 		approachIR();
-  }
-
+		//lift thing (credit to brian)
+		//drop the balls in the center goal
+	}
 }
