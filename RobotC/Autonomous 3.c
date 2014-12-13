@@ -7,32 +7,37 @@
 #pragma config(Motor,  mtr_S1_C2_2,     frontLeft,     tmotorTetrix, PIDControl, reversed, encoder)
 
 #include "2014 Autonomous Functions.h"
+//!!!!!!!!!!!!!!!!!!!**************************ALL THE VALUES ARE FLIPPED BECAUSE WE ARE DRIVING BACKWARDS************************!!!!!!!!!!!!!!!!!!!!!
 
 task main()
 {
-	int x = 23;
-	initializeRobot();
-	drive(x);
-
-	if (irSeeker.acValues[1] > 10 && irSeeker.acValues[2] > 10)
+	int beaconPosition = getBeaconPosition();
+	if(beaconPosition == 3)
+	{
 		approachIR();
-	else
-  {
-		turn(-x);
-		drive(x);
-		turn(x);
-		drive(x);
-  }
-
-	if (irSeeker.acValues[3] > 10 && irSeeker.acValues[4] > 10)
+		//lift thing (credit to brian)
+		//drop the balls in the center goal
+	}
+	else if(beaconPosition == 2)
+	{
+		drive(-18, 30, 30);
+		turn(60, 30);
+		drive(-19, 30, 30);
+		turn(-120, 30);
 		approachIR();
-
-	else
-  {
-		drive(x);
-		turn(x);
-		drive(x);
+		//lift thing (credit to brian)
+		//drop the balls in the center goal
+	}
+	else // beacon position 1
+	{
+		drive(-18, 30, 30);
+		turn(60, 30);
+		drive(-38, 30, 30);
+		turn(-60, 30);
+		drive(-14, 30, 30);
+		turn(-90, 30);
 		approachIR();
-  }
-
+		//lift thing (credit to brian)
+		//drop the balls in the center goal
+	}
 }
