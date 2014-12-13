@@ -9,40 +9,44 @@
 
 task main()
 {
+	intializeRobot();
 	if (ir == 1)
 	{
-		Drive(-x);
-		Turn(-90, 40);
-		Drive(-x);
-		Turn(90, 40);
-		Drive(-x)
-		Turn(90, 40);
-		Drive(-x, 80, 80);
-		Drive(6, 80, 80);
-		Drive(-10, 80, 80);
-		Drive(6, 80, 80);
-		Drive(-10, 80, 80);
+		drive(-20, -80, -80);
+		turn(-90, 40);
+		drive(-10, -80, -80);
+		turn(90, 40);
+		drive(-15, -80, -80)
+		turn(90, 40);
+		drive(-20, -80, -80);
+		for(int i = 0; i < 3; i++)
+		{
+			drive(6, 80, 80);
+			drive(-10, 80, 80);
+		}
 	}
-	if (ir == 2)
+	else if (ir == 2)
 	{
-		Drive(-x);
-		Turn(-45, 40);
-		Drive(-x, 80, 80);
-		Drive(6, 80, 80);
-		Drive(-10, 80, 80);
-		Drive(6, 80, 80);
-		Drive(-10, 80, 80);
+		drive(-20, -80, -80);
+		turn(45, 40);
+		drive(-10, -80, -80);
+		for(int i = 0; i < 3; i++)
+		{
+			drive(6, 80, 80);
+			drive(-10, 80, 80);
+		}
 	}
-	if (ir == 3)
+	else
 	{
- 		Drive(-x);
- 		Turn(-90, 40);
- 		Drive(-x);
- 		Turn(90, 40);
- 		Drive(-x, 80, 80);
- 		Drive(6, 80, 80);
-		Drive(-10, 80, 80);
-		Drive(6, 80, 80);
-		Drive(-10, 80, 80);
+ 		drive(-20, -80, -80);
+ 		turn(-90, 40);
+ 		drive(-10, -80, -80);
+ 		turn(90, 40);
+ 		drive(-25, -80, -80);
+		for(int i = 0; i < 3; i++)
+		{
+			drive(6, 80, 80);
+			drive(-10, 80, 80);
+		}
 	}
 }

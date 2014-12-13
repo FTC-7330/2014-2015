@@ -69,6 +69,7 @@ float floatMin(float a, float b)
 
 // reset encoder values; drives for the distance given at the given speed;
 //if runForever is true, drives forever
+// to drive backwards, both distance and speed should be negative
 void drive(int distanceInches, int rightSpeed, int leftSpeed)
 {
 	int distanceTicks = (int)(distanceInches / 0.044879895);
@@ -96,7 +97,8 @@ void drive(int distanceInches, int rightSpeed, int leftSpeed)
 }
 
 // This takes in power and degree Distance and returns it as turn power
-int turnPower(float degDistance, int maxPower) {
+int turnPower(float degDistance, int maxPower)
+{
 	return (floatMin(degDistance, 15.0) / 15.0) * (maxPower - 10) + 10;
 }
 
@@ -159,6 +161,39 @@ task display()
 	  }
 }
 
+
+int readIR()
+{
+
+	if(irSeeker.dcValues[1] > 8 && irSeeker.dcValues[2] < 8)
+	{
+		return 2;
+	}
+	else
+	{
+		turn(-10, 40);
+
+		int zeroCount = 0;
+		for(int i = 0; i < 5; i++)
+		{
+			if(irSeeker.dcValues[i] < 8)
+			{
+				zeroCount++;
+			}
+		}
+		if(zeroCount == 4)
+		{
+			return 3;
+		}
+		else
+		{
+			return 1;
+		}
+
+		turn(10, 40);
+	}
+}
+
 task printHeading()
 {
 	while(true)
@@ -215,6 +250,8 @@ void initializeRobot()
 	return;
 	//gyro initialize?
 }
+
+
 
 void approachIR()
 {

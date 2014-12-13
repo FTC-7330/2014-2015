@@ -11,7 +11,7 @@
 
 task main()
 {
-	int beaconPosition = getBeaconPosition();
+	int beaconPosition = readIR();
 	if(beaconPosition == 3)
 	{
 		approachIR();
