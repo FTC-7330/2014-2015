@@ -1,6 +1,8 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTMotor)
+#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S3,     irSensor,       sensorHiTechnicIRSeeker600)
 #pragma config(Sensor, S4,     gyro,           sensorI2CHiTechnicGyro)
+#pragma config(Motor,  motorA,          pinMotor,      tmotorNXT, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C1_1,     motorD,        tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     motorE,        tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C2_1,     backRight,     tmotorTetrix, PIDControl, encoder)
@@ -28,12 +30,18 @@ int joystickLeftX;
 int joystickRightX;
 int joystickLeftY;
 int joystickRightY;
+int scaledLeftX;
+int scaledRightX;
+int scaledLeftY;
+int scaledRightY;
+
 bool isMecanum = true;
 bool isCollectorRunning = false;
 bool isShooterRunning = true;
 bool isCamUp = false;
 
 
+bool isTurbo;
 int collectionPower = 70;
 int deadZone = 10;
 
@@ -84,6 +92,7 @@ void inputManager()
 	bool rbJoyTWOIsPressed = false;
 	bool rbJoyTWOWasPressed = false;
 
+
 	while(true)
 	{
 			getJoystickSettings(joystick);
@@ -93,8 +102,8 @@ void inputManager()
 
 			//Joystick 2 Booleans
 			rbJoyTWOIsPressed = (joy2Btn(RIGHT_BUTTON)==1);
-			lbJoyTWOIsPressed = (joy2Btn(LEFT_BUTTON)==1);
 			startJoyTWOIsPressed = (joy2Btn(START_BUTTON)==1);
+			isTurbo = (joy2Btn(LEFT_BUTTON)==1);
 
 			if(startJoyONEIsPressed&&!startJoyONEWasPressed)
 			{
@@ -120,12 +129,18 @@ void inputManager()
 				isCamUp = false;
 			}
 
+
 			joystickRightY = checkDeadZone(-joystick.joy1_y2);
 			joystickLeftY = checkDeadZone(joystick.joy1_y1);
 			joystickRightX = checkDeadZone(-joystick.joy1_x2);
 			joystickLeftX = checkDeadZone(joystick.joy1_x1);
 
-			// joystickRightY = checkDeadZone(-joystick.joy1_y2);
+			scaledRightY = scaleJoystickValues(joystickRightY);
+			scaledLeftY = scaleJoystickValues(joystickLeftY);
+			scaledRightX = scaleJoystickValues(joystickRightX);
+			scaledLeftX = scaleJoystickValues(joystickLeftX);
+
+			//joystickRightY = checkDeadZone(-joystick.joy1_y2);
 			// joystickLeftY = checkDeadZone(-joystick.joy1_y1);
 			// joystickRightX = checkDeadZone(joystick.joy1_x2);
 			// joystickLeftX = checkDeadZone(joystick.joy1_x1);
@@ -149,10 +164,10 @@ task Drive()
 	{
 		if(isMecanum)
 		{
-			motor[frontLeft] = (joystickLeftY - joystickRightX + joystickLeftX)*100/127;
-			motor[backLeft] =  (joystickLeftY - joystickRightX - joystickLeftX)*100/127;
-			motor[frontRight] = (joystickLeftY + joystickRightX - joystickLeftX)*100/127;
-			motor[backRight] = (joystickLeftY + joystickRightX + joystickLeftX) *100/127;
+			motor[frontLeft] = (scaledLeftY - scaledRightX + scaledLeftX);
+			motor[backLeft] =  (scaledLeftY - scaledRightX - scaledLeftX);
+			motor[frontRight] = (scaledLeftY + scaledRightX - scaledLeftX);
+			motor[backRight] = (scaledLeftY + scaledRightX + scaledLeftX);
 
 			// motor[frontLeft] = (joystickLeftY - joystickRightX + joystickLeftX)*100/127;
 			// motor[backLeft] =  (joystickLeftY - joystickRightX - joystickLeftX)*100/127;
@@ -173,34 +188,20 @@ task Collection()
 {
 	while(true)
 	{
-		if(joy2Btn(5)==1)
+		if(joy1Btn(TOP_HAT_DOWN))
 		{
-			motor[camMotor] = 50;
-			/*if(nMotorEncoder[camMotor] < 1440)
-			{
-				motor[camMotor] = 50;
-			}
-			else
-			{
-				 motor[camMotor] = 0;
-			}*/
+			motor[pinMotor]= 30;
 		}
-		else if(joy2Btn(6)==1)
+		else if(joy1Btn(TOP_HAT_DOWN))
 		{
-			motor[camMotor] = -50;
-			/*if(nMotorEncoder[camMotor] > 0)
-			{
-				motor[camMotor] = -50;
-			}
-			else
-			{
-				motor[camMotor] = 0;
-			}*/
+			motor[pinMotor] = -30;
 		}
 		else
 		{
-			motor[camMotor] = 0;
+			motor[pinMotor] = 0;
 		}
+
+
 
 		if(isCollectorRunning)
 		{
@@ -213,6 +214,8 @@ task Collection()
 	}
 
 }
+
+
 
 task Display()
 {
