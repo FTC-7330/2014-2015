@@ -111,6 +111,7 @@ void tankDrive(int left, int right)
 // power must be greater than 15
 // This method takes in an amount of degrees and power so it
 // can turn the robot at the given angle with the given power
+//!!!!!!!!!!!!!!!!!!!!!!**********************************LEFT IS NEGATIVE*****************************!!!!!!!!!!!!!!!!!!
 void turn(float degrees, int power)// power is always positive. degrees is positive or negative
 {
 	targetHeading = degHeading + degrees;
@@ -129,8 +130,9 @@ void turn(float degrees, int power)// power is always positive. degrees is posit
 				//drive(0.02, -power, power);
 				tankDrive(-power, power); // drive left at power and right at -power
 			}
+			wait10Msec(10);
 		}
-		wait10Msec(10);
+		//wait10Msec(10);
 	}
 
 	motor[backRight] = 0;
