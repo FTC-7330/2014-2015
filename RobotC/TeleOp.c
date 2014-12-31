@@ -3,8 +3,8 @@
 #pragma config(Sensor, S3,     irSensor,       sensorHiTechnicIRSeeker600)
 #pragma config(Sensor, S4,     gyro,           sensorI2CHiTechnicGyro)
 #pragma config(Motor,  motorA,          pinMotor,      tmotorNXT, PIDControl, encoder)
-#pragma config(Motor,  mtr_S1_C1_1,     motorD,        tmotorTetrix, PIDControl, encoder)
-#pragma config(Motor,  mtr_S1_C1_2,     motorE,        tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C1_1,     motorD,        tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C1_2,     motorE,        tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C2_1,     backRight,     tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C2_2,     backLeft,      tmotorTetrix, PIDControl, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C3_1,     frontRight,    tmotorTetrix, PIDControl, encoder)
@@ -181,24 +181,28 @@ task Drive()
 			motor[frontRight] = joystickLeftY;
 			motor[backRight] = joystickLeftY;
 		}
+		wait1Msec(10);
 	}
 }
 
 task Collection()
 {
+
 	while(true)
 	{
-		if(joy1Btn(TOP_HAT_DOWN))
+
+		if(joystick.joy2_TopHat == TOP_HAT_UP)
 		{
-			motor[pinMotor]= 30;
+			motor[motorA]= 100;
 		}
-		else if(joy1Btn(TOP_HAT_DOWN))
+		else if(joystick.joy2_TopHat == TOP_HAT_DOWN)
 		{
-			motor[pinMotor] = -30;
+			motor[motorA] = -100;
 		}
 		else
 		{
-			motor[pinMotor] = 0;
+			motor[motorA] = 0;
+			bFloatDuringInactiveMotorPWM = false;
 		}
 
 
@@ -211,25 +215,28 @@ task Collection()
 		{
 			motor[collectionMotor] = 0;
 		}
+
+		wait1Msec(10);
 	}
 
 }
 
 
 
-task Display()
+/*task Display()
 {
 	while(true)
 	{
 		writeDebugStreamLine("isCamUp: %d", isCamUp);
 		writeDebugStreamLine("Cam Motor Encoder: %d",  nMotorEncoder[camMotor]);
+		wait1Msec(10);
 	}
-}
+}*/
 
 task main()
 {
 	startTask(Drive);
 	startTask(Collection);
-	startTask(Display);
+	//startTask(Display);
 	inputManager();
 }

@@ -1,6 +1,4 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTMotor)
-#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
-#pragma config(Sensor, S2,     ultrasonic,     sensorSONAR)
 #pragma config(Sensor, S3,     irSensor,       sensorHiTechnicIRSeeker600)
 #pragma config(Sensor, S4,     gyro,           sensorI2CHiTechnicGyro)
 #pragma config(Motor,  mtr_S1_C1_1,     motorD,        tmotorTetrix, PIDControl, encoder)
@@ -18,9 +16,9 @@
 
 task main()
 {
-	waitForStart();
+	//waitForStart()
 	initializeRobot();
-	//startTask(display);
-  drive(300, 70, 70);
-  //some credit to sarah but most of the credit to tiller :)
+	//int k = SensorValue[gyro];
+  turn(80, 70);
+  //some credit to sarah but most of the credit to rohan :)
 }

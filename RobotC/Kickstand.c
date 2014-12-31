@@ -9,7 +9,8 @@
 
 task main()
 {
-	intializeRobot();
+	initializeRobot();
+	int ir = readIR();
 	if (ir == 1)
 	{
 		drive(-20, -80, -80);

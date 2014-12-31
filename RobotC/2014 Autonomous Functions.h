@@ -1,5 +1,3 @@
-#include "3rd Party Driver Library\include\hitechnic-irseeker-v2.h"
-tHTIRS2 irSeeker;
 
 // Functions for Autonomous Methods
 // - display
@@ -21,7 +19,19 @@ long lastTime = 0;
 int currentVelocity;
 float targetHeading;
 
-void waitForStop();
+void waitForStop()
+{
+	while(nMotorRunState[backRight] != runStateIdle && nMotorRunState[backLeft] != runStateIdle
+		&& nMotorRunState[frontRight] != runStateIdle && nMotorRunState[frontLeft] != runStateIdle)
+	{
+	}
+
+	motor[frontLeft] = 0;
+	motor[backRight] = 0;
+	motor[backLeft] = 0;
+	motor[frontRight] = 0;
+}
+
 task updateHeading()
 {
 	while(true)
@@ -164,33 +174,17 @@ task display()
 
 int readIR()
 {
-
-	if(irSeeker.dcValues[1] > 8 && irSeeker.dcValues[2] < 8)
+	if (SensorValue[ultrasonic] < 220)
+	{
+		return 1;
+	}
+	else if (SensorValue[ultrasonic] < 420)
 	{
 		return 2;
 	}
 	else
 	{
-		turn(-10, 40);
-
-		int zeroCount = 0;
-		for(int i = 0; i < 5; i++)
-		{
-			if(irSeeker.dcValues[i] < 8)
-			{
-				zeroCount++;
-			}
-		}
-		if(zeroCount == 4)
-		{
-			return 3;
-		}
-		else
-		{
-			return 1;
-		}
-
-		turn(10, 40);
+		return 3;
 	}
 }
 
@@ -222,18 +216,7 @@ task printEncoderValues()
 	}
 }
 // Continues driving until encoders reach destination, then resets motor speed.
-void waitForStop()
-{
-	while(nMotorRunState[backRight] != runStateIdle && nMotorRunState[backLeft] != runStateIdle
-		&& nMotorRunState[frontRight] != runStateIdle && nMotorRunState[frontLeft] != runStateIdle)
-	{
-	}
 
-	motor[frontLeft] = 0;
-	motor[backRight] = 0;
-	motor[backLeft] = 0;
-	motor[frontRight] = 0;
-}
 // Initializes the Robot at the beginning of the match.
 //!!!!!!!!!!!!!!!!!!!***********************needs to be called in order for robot to work********************************!!!!!!!!!!!!
 void initializeRobot()
@@ -247,39 +230,6 @@ void initializeRobot()
 	initial = sum / 100;
 	startTask(updateHeading);
 	//initSensor(&irSeeker, S1);
-	return;
+	//return;
 	//gyro initialize?
-}
-
-
-
-void approachIR()
-{
-	int leftSpeed = 30;
-	int rightSpeed = 30;
-	int speedDelta = 2;
-	tankDrive(leftSpeed, -rightSpeed);
-
-	while (irSeeker.acValues[1] < 20 || irSeeker.acValues[2] < 20 || abs(irSeeker.acValues[2] - irSeeker.acValues[1]) > 10) //Ruthie's while loop
-	{
-	}
-	tankDrive(0, 0);
-
-	while(false)
-	{
-		tankDrive(leftSpeed, rightSpeed);
-
-		if((irSeeker.acValues[1]+15) < irSeeker.acValues[2]) //if 2 gets a higher signal, drive towards it
-		{
-			motor[frontRight] = rightSpeed - speedDelta;
-			motor[backRight] = rightSpeed - speedDelta;
-		}
-		if((irSeeker.acValues[2]+15) < irSeeker.acValues[1]) //if 1 gets a higher signal, drive towards it
-		{
-			motor[frontLeft] = rightSpeed - speedDelta;
-			motor[backLeft] = rightSpeed - speedDelta;
-		}
-		wait1Msec(10);
-	}
-	tankDrive(0, 0);
 }
