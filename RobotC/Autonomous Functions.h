@@ -2,15 +2,18 @@
 // - display
 // - turn
 // - drive
+// - findPosition
+// - initialHeadingizeRobot
 
-
+float initialHeading;
 float degHeading;
-float initial;
 float radHeading;
-long lastTime = 0;
-int currentVelocity;
 float targetHeading;
 
+long lastTime = 0; // time counter for heading method
+int currentVelocity; // angular velocity calculated by heading method
+
+// helper method for drive - waits for motors to reach encoder target
 void waitForStop()
 {
 	while(nMotorRunState[backRight] != runStateIdle && nMotorRunState[backLeft] != runStateIdle
@@ -24,11 +27,12 @@ void waitForStop()
 	motor[frontRight] = 0;
 }
 
+// updates variable current
 task updateHeading()
 {
 	while(true)
 	{
-		currentVelocity = SensorValue[gyro] - initial; // gets the new sensor reading
+		currentVelocity = SensorValue[gyro] - initialHeading; // gets the new sensor reading
 		degHeading = degHeading + ((currentVelocity) * (time1[T1] - lastTime) * .001); // modifies the header
 		lastTime = time1[T1]; // sets the last time for the next reading
 
@@ -188,8 +192,8 @@ task printHeading()
 		writeDebugStreamLine("Last Time: %d",  lastTime, time1[T1]);
 		writeDebugStreamLine("Deg Heading: %d", degHeading);
 		writeDebugStreamLine("Target Heading: %d", targetHeading);
-		writeDebugStreamLine("Initial: %d", initial);
-		writeDebugStreamLine("Angular Velocity: %d", SensorValue[gyro] - initial);
+		writeDebugStreamLine("initialHeading: %d", initialHeading);
+		writeDebugStreamLine("Angular Velocity: %d", SensorValue[gyro] - initialHeading);
 		writeDebugStreamLine("----------------------------");
 		wait1Msec(200);
 	}
@@ -209,9 +213,9 @@ task printEncoderValues()
 }
 // Continues driving until encoders reach destination, then resets motor speed.
 
-// Initializes the Robot at the beginning of the match.
+// initialHeadingizes the Robot at the beginning of the match.
 //!!!!!!!!!!!!!!!!!!!***********************needs to be called in order for robot to work********************************!!!!!!!!!!!!
-void initializeRobot()
+void initialHeadingizeRobot()
 {
 	ClearTimer(T1);
 	int sum = 0;
@@ -219,9 +223,9 @@ void initializeRobot()
 		sum += SensorValue[gyro];
 		wait1Msec(1);
 	}
-	initial = sum / 100;
+	initialHeading = sum / 100;
 	startTask(updateHeading);
 	//initSensor(&irSeeker, S1);
 	//return;
-	//gyro initialize?
+	//gyro initialHeadingize?
 }
