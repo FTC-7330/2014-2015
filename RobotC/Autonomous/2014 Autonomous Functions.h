@@ -1,24 +1,19 @@
-
 // Functions for Autonomous Methods
 // - display
 // - turn
 // - drive
-// - driveArm
-// - driveFailSafe
+// - findPosition
+// - initializeRobot
 
-// right test value: 270
-// left test value: 260
-// right competition value: ????
-// left competition value: ????
-
-
+float initialVelocity;
 float degHeading;
-float initial;
 float radHeading;
-long lastTime = 0;
-int currentVelocity;
 float targetHeading;
 
+long lastTime = 0; // time counter for heading method
+int currentVelocity; // angular velocity calculated by heading method
+
+// helper method for drive - waits for motors to reach encoder target
 void waitForStop()
 {
 	while(nMotorRunState[backRight] != runStateIdle && nMotorRunState[backLeft] != runStateIdle
@@ -32,13 +27,14 @@ void waitForStop()
 	motor[frontRight] = 0;
 }
 
+// updates variable currentHeading to reflect the current heading in degrees
 task updateHeading()
 {
 	while(true)
 	{
-		currentVelocity = SensorValue[gyro] - initial; // gets the new sensor reading
-		degHeading = degHeading + ((currentVelocity) * (time1[T1] - lastTime) * .001); // modifies the header
-		lastTime = time1[T1]; // sets the last time for the next reading
+		currentVelocity = SensorValue[gyro] - initialVelocity;
+		degHeading = degHeading + ((currentVelocity) * (time1[T1] - lastTime) * .001);
+		lastTime = time1[T1];
 
 		if(time1[T1] > 30000)
 		{
@@ -46,12 +42,11 @@ task updateHeading()
 			lastTime = 0;
 		}
 
-		radHeading = degHeading / 180 * PI; // the heading expressed in radians
+		radHeading = degHeading / 180 * PI;
 		wait1Msec(5);
 	}
 }
 
-//It takes in two values and returns the minimum
 int min(int a, int b)
 {
 	if (a < b)
@@ -64,7 +59,7 @@ int min(int a, int b)
 	}
 }
 
-//It takes in two values and returns the minimum
+// duplicate of min with floats
 float floatMin(float a, float b)
 {
 	if (a < b)
@@ -77,8 +72,7 @@ float floatMin(float a, float b)
 	}
 }
 
-// reset encoder values; drives for the distance given at the given speed;
-//if runForever is true, drives forever
+// reset encoder values and drives for the given distance at the given speed
 // to drive backwards, both distance and speed should be negative
 void drive(int distanceInches, int rightSpeed, int leftSpeed)
 {
@@ -106,12 +100,14 @@ void drive(int distanceInches, int rightSpeed, int leftSpeed)
 	nMotorEncoder[frontRight] = 0;
 }
 
-// This takes in power and degree Distance and returns it as turn power
+// helper method for turn that takes in the maximum power and the remaining distance and returns the
+// current power
 int turnPower(float degDistance, int maxPower)
 {
 	return (floatMin(degDistance, 15.0) / 15.0) * (maxPower - 10) + 10;
 }
 
+// helper method that sets the right and left motors
 void tankDrive(int left, int right)
 {
 	motor[backRight] = right;
@@ -120,13 +116,14 @@ void tankDrive(int left, int right)
 	motor[frontLeft] = left;
 }
 
-// power must be greater than 15
-// This method takes in an amount of degrees and power so it
-// can turn the robot at the given angle with the given power
-//!!!!!!!!!!!!!!!!!!!!!!**********************************LEFT IS NEGATIVE*****************************!!!!!!!!!!!!!!!!!!
-void turn(float degrees, int power)// power is always positive. degrees is positive or negative
+// pre: power must be greater than 15, power should always be positive and degrees should be positive
+// or negative based on the desired direction
+// ***** LEFT IS NEGATIVE *****
+// turns the robot to the input angle at the input power
+void turn(float degrees, int power)
 {
 	targetHeading = degHeading + degrees;
+
 	while (abs(targetHeading - degHeading) > 2)
 	{
 		while (abs(targetHeading - degHeading) > 2)
@@ -135,12 +132,12 @@ void turn(float degrees, int power)// power is always positive. degrees is posit
 			if (targetHeading - degHeading > 0) // left turn
 			{
 				//drive(0.02, power, -power);
-				tankDrive(power, -power); //drive left at -power and right at power
+				tankDrive(power, -power);
 			}
-			else // Right turn
+			else // right turn
 			{
 				//drive(0.02, -power, power);
-				tankDrive(-power, power); // drive left at power and right at -power
+				tankDrive(-power, power);
 			}
 			wait10Msec(10);
 		}
@@ -155,12 +152,11 @@ void turn(float degrees, int power)// power is always positive. degrees is posit
 
 
 
-// Displays value of the IR sensor, the right and left encoders, and the sonar sensor
+// displays variables for debugging
 task display()
 {
     while (true)
     {
-    	//Displays information about encoders and IR and sonar sensors
 			int leftEncoder = nMotorEncoder[backLeft];
 			int rightEncoder = nMotorEncoder[backRight];
 
@@ -171,8 +167,9 @@ task display()
 	  }
 }
 
-
-int readIR()
+// returns an integer that reperesents the position of the center structure determined
+// based on the ultrasonic sensor
+int findPosition()
 {
 	if (SensorValue[ultrasonic] < 220)
 	{
@@ -188,6 +185,7 @@ int readIR()
 	}
 }
 
+// debugging method that prints information about the heading
 task printHeading()
 {
 	while(true)
@@ -196,13 +194,13 @@ task printHeading()
 		writeDebugStreamLine("Last Time: %d",  lastTime, time1[T1]);
 		writeDebugStreamLine("Deg Heading: %d", degHeading);
 		writeDebugStreamLine("Target Heading: %d", targetHeading);
-		writeDebugStreamLine("Initial: %d", initial);
-		writeDebugStreamLine("Angular Velocity: %d", SensorValue[gyro] - initial);
+		writeDebugStreamLine("initialVelocity: %d", initialVelocity);
+		writeDebugStreamLine("Angular Velocity: %d", SensorValue[gyro] - initialVelocity);
 		writeDebugStreamLine("----------------------------");
 		wait1Msec(200);
 	}
 }
-// Prints the Endoder Values on the NXT.
+// debugging method that prints encoder values
 task printEncoderValues()
 {
 	while(true)
@@ -215,21 +213,20 @@ task printEncoderValues()
 		wait1Msec(500);
 	}
 }
-// Continues driving until encoders reach destination, then resets motor speed.
 
-// Initializes the Robot at the beginning of the match.
-//!!!!!!!!!!!!!!!!!!!***********************needs to be called in order for robot to work********************************!!!!!!!!!!!!
+// initializes the robot at the beginning of the match
+// ***** needs to be called in order for robot to work *****
+// calculates initial velocity from the gyro and starts updateHeading
 void initializeRobot()
 {
 	ClearTimer(T1);
+
 	int sum = 0;
 	for (int i = 0; i < 100; i++) {
 		sum += SensorValue[gyro];
 		wait1Msec(1);
 	}
-	initial = sum / 100;
+	initialVelocity = sum / 100;
+
 	startTask(updateHeading);
-	//initSensor(&irSeeker, S1);
-	//return;
-	//gyro initialize?
 }
