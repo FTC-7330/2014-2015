@@ -18,7 +18,7 @@ task main()
 {
 	waitForStart();
 	initializeRobot();
-	//startTask(display);
   drive(300, 70, 70);
-  //some credit to sarah but most of the credit to tiller :)
+
+  //some credit to mihir but most of the credit to rohan :)
 }

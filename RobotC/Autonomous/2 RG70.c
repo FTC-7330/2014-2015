@@ -21,45 +21,43 @@
 
 task main()
 {
-	//waitForStart();
-	initializeRobot();
-	nmotorEncoder[pinMotor] = 0;
-	startTask(printHeading);
+	 //waitForStart();
+	 initializeRobot();
+	 nmotorEncoder[pinMotor] = 0;
+	 startTask(printHeading);
 
-	//drive off the ramp backwards towards the 60cm rolling goal
-		drive(-58, 20, 20)//drive backwards 58 power 20
-		drive(-54, 50, 50)//drive backwards 54 inches power 50
+	 //drive off the ramp backwards towards the 60cm rolling goal
+	 drive(-58, -20, -20);
+	 drive(-54, -50, -50);
 
-	//capture 60cm rolling gwait10Msec
-		motor[pinMotor] = 40;//move goal grabbing device to capture the goal
-		while(nMotorEncoder[pinMotor] < 60)
-		{
-		}
-		motor[pinMotor] = 0;
+	 motor[pinMotor] = 40;
+	 while(nMotorEncoder[pinMotor] < 60)
+	 {
+	 }
+  	motor[pinMotor] = 0;
 		bFloatDuringInactiveMotorPWM = false;
 
+		// drive forward to secure the goal
+		drive(1, 20, 20);
 
-	//put the balls into the rolling goal
-		drive(1, 20, 20);//drive forward to secure the goal
-		/*motor[liftingMotor] = 30;//drive the motor to raise the arm
+/*	motor[liftingMotor] = 30;
 		wait1Msec(500);
 		motor[liftingMotor] = 0;
 		wait1Msec(100);
-		motor[ballReleaseMotor] = 30;//spin the motor to release the balls
+		motor[ballReleaseMotor] = 30;
 		wait1Msec(200);
-		motor[ballReleaseMotor] = 0;*/
+		motor[ballReleaseMotor] = 0; */
 
-	//drive to the scoring area
-		turn(-90, 50);//turn 90 degrees left
-		drive(-35, 50, 50);//drive backwards 35 inches
-		turn(-90, 50);//turn 90 degrees left
-		drive(-98, 50, 50);//drive backwards 98 inches
-		turn(90, 50);//turn 90 degrees right
-		drive(-10, 50, 50);//drive backwards 10 inches
+		turn(-90, 50);
+		drive(-35, -50, -50);
+		turn(-90, -50);
+		drive(-98, -50, -50);
+		turn(90, 50);
+		drive(-10, -50, -50);
 
-	//detatch the cammotor
-	/*	motor[camMotor] = -10;//drive the cammotor backwards
+	 // detatch the cammotor
+/*	motor[camMotor] = -10;
 		wait1Msec(200);
-		motor[camMotor] = 0;*/
+		motor[camMotor] = 0; */
 
 }
