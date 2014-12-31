@@ -15,8 +15,9 @@
 task main()
 {
 	initializeRobot();
-	int ir = readIR();
-	if (ir == 1)
+	int position = readPosition();
+
+	if (position == 1)
 	{
 		drive(-20, -80, -80);
 		turn(-90, 40);
@@ -25,17 +26,19 @@ task main()
 		drive(-15, -80, -80)
 		turn(90, 40);
 		drive(-20, -80, -80);
+
 		for(int i = 0; i < 3; i++)
 		{
 			drive(6, 80, 80);
 			drive(-10, 80, 80);
 		}
 	}
-	else if (ir == 2)
+	else if (position == 2)
 	{
 		drive(-20, -80, -80);
 		turn(45, 40);
 		drive(-10, -80, -80);
+
 		for(int i = 0; i < 3; i++)
 		{
 			drive(6, 80, 80);
@@ -49,7 +52,8 @@ task main()
  		drive(-10, -80, -80);
  		turn(90, 40);
  		drive(-25, -80, -80);
-		for(int i = 0; i < 3; i++)
+
+ 		for(int i = 0; i < 3; i++)
 		{
 			drive(6, 80, 80);
 			drive(-10, 80, 80);
