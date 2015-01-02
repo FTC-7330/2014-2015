@@ -20,14 +20,14 @@ task main()
 	if (position == 1)
 	{
 		drive(-20, -80, -80);
-		turn(-90, 40);
+		turn(90, 40);
 		drive(-10, -80, -80);
-		turn(90, 40);
+		turn(-90, 40);
 		drive(-15, -80, -80)
-		turn(90, 40);
+		turn(-90, 40);
 		drive(-20, -80, -80);
 
-		for(int i = 0; i < 3; i++)
+		for(int i = 0; i <3; i++)
 		{
 			drive(6, 80, 80);
 			drive(-10, 80, 80);
@@ -36,10 +36,10 @@ task main()
 	else if (position == 2)
 	{
 		drive(-20, -80, -80);
-		turn(45, 40);
+		turn(-45, 40);
 		drive(-10, -80, -80);
 
-		for(int i = 0; i < 3; i++)
+		for(int i = 0; i <3; i++)
 		{
 			drive(6, 80, 80);
 			drive(-10, 80, 80);
@@ -48,12 +48,12 @@ task main()
 	else
 	{
  		drive(-20, -80, -80);
- 		turn(-90, 40);
- 		drive(-10, -80, -80);
  		turn(90, 40);
+ 		drive(-10, -80, -80);
+ 		turn(-90, 40);
  		drive(-25, -80, -80);
 
- 		for(int i = 0; i < 3; i++)
+ 		for(int i = 0; i <3; i++)
 		{
 			drive(6, 80, 80);
 			drive(-10, 80, 80);

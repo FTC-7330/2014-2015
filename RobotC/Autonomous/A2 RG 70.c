@@ -37,10 +37,10 @@ task main()
 	 {
 	 }
   	motor[pinMotor] = 0;
-		bFloatDuringInactiveMotorPWM = false;
 
 		// drive forward to secure the goal
 		drive(1, 20, 20);
+		wait1Msec(100);
 
 /*	motor[liftingMotor] = 30;
 		wait1Msec(500);
@@ -50,11 +50,11 @@ task main()
 		wait1Msec(200);
 		motor[ballReleaseMotor] = 0; */
 
-		turn(-90, 50);
-		drive(-35, -50, -50);
-		turn(-90, -50);
-		drive(-98, -50, -50);
 		turn(90, 50);
+		drive(-35, -50, -50);
+		turn(90, 50);
+		drive(-98, -50, -50);
+		turn(-90, 50);
 		drive(-10, -50, -50);
 
 	 // detatch the cammotor
