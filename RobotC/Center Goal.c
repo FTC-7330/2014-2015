@@ -20,25 +20,21 @@ task main()
 	}
 	else if(beaconPosition == 2)
 	{
-		drive(x);
-		turn(-90, 30);
-		drive(x);
-		turn(60, 30);
-		drive(x);
-		turn(90);
+		drive(18, 30, 30);
+		turn(-60, 30);
+		drive(19, 30, 30);
+		turn(120, 30);
 		approachIR();
 		//lift thing (credit to brian)
 		//drop the balls in the center goal
 	}
 	else // beacon position 1
 	{
-		drive(x);
-		turn(-90, 30);
-		drive(x);
+		drive(18, 30, 30);
+		turn(-60, 30);
+		drive(38, 30, 30);
 		turn(60, 30);
-		drive(x);
-		turn(30, 30);
-		drive(x);
+		drive(14, 30, 30);
 		turn(90, 30);
 		approachIR();
 		//lift thing (credit to brian)
