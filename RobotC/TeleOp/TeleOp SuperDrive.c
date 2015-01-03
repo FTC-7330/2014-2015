@@ -31,25 +31,25 @@ void initializeRobot(){
 // This is the superdrive task. If you can think of any better names, please tell me :P
 // This task incorporates two modes, regular mecanum driving and free-spinning mode
 task superDrive(){
-	float x1,y1,x2,y2,LF,RF,LB,RB= 0;
+	float x1,y1,x2,y2,LF,RF,LB,RB = 0;
 	int minJoy = 12;
 	float turning;
 	float mag; // magnitude of the joystick vector
 	float initialHeading = radheading;
 	float calcHeading = radheading; // sets a base heading for the
 	float movementAmount, turningAmount, totalAmount; // for apportioning power to turning and moving
-	while(true){
+	while(true) {
 		// Get joystick values
 		x1 = joystick.joy1_x1 * .5;
 		y1 = joystick.joy1_y1 * .5;
 		x2 = joystick.joy1_x2 * .5;
 		y2 = joystick.joy1_y2 * .5;
 		// function for making new initial heading
-		if (joy1Btn(5)==1){
+		if (joy1Btn(5) == 1){
 			initialHeading = radheading;
 		}
 		// starts free-spinning mode
-		if (joy1Btn(6)==1){
+		if (joy1Btn(6) == 1){
 			// find joystick vector angle
 			joyAngle = atan2(y1, x1);
 			// find joystick vector magnitude
@@ -65,9 +65,9 @@ task superDrive(){
 				FLset=0;FRset=0;
 			}
 			// find turning magnitude
-			turning = x2/2;
+			turning = x2 / 2;
 			//fix turning drifting
-			if (abs(joystick.joy1_x2)<minJoy){
+			if (abs(joystick.joy1_x2) < minJoy) {
 				turning = 0;
 			}
 			// apportion motor capacity to movement and turning
@@ -76,11 +76,11 @@ task superDrive(){
 			movementAmount = (mag*3)/totalAmount;
 			turningAmount = turning/totalAmount;
 			// Apply finished values to motors
-	  		motor[FL] = FLset*movementAmount+turning*turningAmount;
+	  	motor[FL] = FLset*movementAmount+turning*turningAmount;
 			motor[FR] = FRset*movementAmount-turning*turningAmount;
 			motor[BL] = FRset*movementAmount+turning*turningAmount;
 			motor[BR] = FLset*movementAmount-turning*turningAmount;
-		} else {
+		  } else {
 			// Resets movement values
 			LF = 0;
 			RF = 0;
@@ -124,7 +124,7 @@ task superDrive(){
 
 // This task finds the heading of the robot using the gyro.
 // Keep in mind that this needs the code written in the initializeRobot() function to work
-task heading(){
+task findHeading(){
 	ClearTimer(T1); // sets timer to 0
 	while(true){
 		int currentReading = SensorValue[gyro] - initial; // gets the new sensor reading
@@ -155,7 +155,7 @@ task main(){
   initializeRobot();
   //waitForStart();   // wait for start of tele-op phase
   StartTask(display);
-  StartTask(heading);
+  StartTask(findHeading);
   StartTask(superDrive);
   while (true)
   {

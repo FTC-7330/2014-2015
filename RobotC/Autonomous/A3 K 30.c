@@ -1,5 +1,5 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTMotor)
-#pragma config(Sensor, S3,     ultrasonic,     sensorSONAR)
+#pragma config(Sensor, S2,     ultrasonic,     sensorSONAR)
 #pragma config(Sensor, S4,     gyro,           sensorI2CHiTechnicGyro)
 #pragma config(Motor,  mtr_S1_C1_1,     motorD,        tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     motorE,        tmotorTetrix, openLoop, reversed)
@@ -12,51 +12,48 @@
 
 #include "2014 Autonomous Functions.h"
 
+int position;
+
+task displayPosition()
+{
+
+}
+
 task main()
 {
 	initializeRobot();
-	int position = readPosition();
+	int position = findPosition();
+	nxtDisplayString(1,"position: %d", position);
+	nxtDisplayString(2, "sensor: %d", sensorValue(ultrasonic));
 
 	if (position == 1)
 	{
-		drive(-20, -80, -80);
+		drive(-400, -50, -50);
 		turn(90, 40);
-		drive(-10, -80, -80);
+		drive(-2800, -50, -50);
 		turn(-90, 40);
-		drive(-15, -80, -80)
+		drive(-3800, -50, -50)
 		turn(-90, 40);
-		drive(-20, -80, -80);
+		drive(-3800, -80, -80);
 
-		for(int i = 0; i <3; i++)
-		{
-			drive(6, 80, 80);
-			drive(-10, 80, 80);
-		}
 	}
 	else if (position == 2)
 	{
-		drive(-20, -80, -80);
-		turn(-45, 40);
-		drive(-10, -80, -80);
+		drive(-2850, -50, -50);
+		turn(40, 40);
+		drive(-3000, -80, -80);
 
-		for(int i = 0; i <3; i++)
-		{
-			drive(6, 80, 80);
-			drive(-10, 80, 80);
-		}
 	}
 	else
 	{
- 		drive(-20, -80, -80);
+ 		drive(-2000, -50, -50);
+ 		wait1Msec(200);
  		turn(90, 40);
- 		drive(-10, -80, -80);
+ 		drive(-2100, -50, -50);
+ 		wait1Msec(200);
  		turn(-90, 40);
- 		drive(-25, -80, -80);
-
- 		for(int i = 0; i <3; i++)
-		{
-			drive(6, 80, 80);
-			drive(-10, 80, 80);
-		}
+ 		wait1Msec(200;
+ 		drive(-4000, -80, -80);
+		wait1Msec(200);
 	}
 }

@@ -74,9 +74,8 @@ float floatMin(float a, float b)
 
 // reset encoder values and drives for the given distance at the given speed
 // to drive backwards, both distance and speed should be negative
-void drive(int distanceInches, int rightSpeed, int leftSpeed)
+void drive(int distanceTicks, int rightSpeed, int leftSpeed)
 {
-	int distanceTicks = (int)(distanceInches / 0.044879895);
 	nMotorEncoder[backRight] = 0;
 	nMotorEncoder[backLeft] = 0;
 	nMotorEncoder[frontRight] = 0;
@@ -104,7 +103,7 @@ void drive(int distanceInches, int rightSpeed, int leftSpeed)
 // current power
 int turnPower(float degDistance, int maxPower)
 {
-	return (floatMin(degDistance, 15.0) / 15.0) * (maxPower - 10) + 10;
+	return (floatMin(degDistance, 10.0) / 10.0) * (maxPower - 30) + 30;
 }
 
 // helper method that sets the right and left motors
@@ -124,9 +123,9 @@ void turn(float degrees, int power)
 {
 	targetHeading = degHeading + degrees;
 
-	while (abs(targetHeading - degHeading) > 2)
+	while (abs(targetHeading - degHeading) > 1)
 	{
-		while (abs(targetHeading - degHeading) > 2)
+		while (abs(targetHeading - degHeading) > 1)
 		{
 			power = turnPower(abs(targetHeading - degHeading), power);
 			if (targetHeading - degHeading > 0) // left turn
@@ -139,9 +138,9 @@ void turn(float degrees, int power)
 				//drive(0.02, -power, power);
 				tankDrive(-power, power);
 			}
-			wait10Msec(10);
+			//wait1Msec(10);
 		}
-		//wait10Msec(10);
+		wait1Msec(10);
 	}
 
 	motor[backRight] = 0;
@@ -171,17 +170,17 @@ task display()
 // based on the ultrasonic sensor
 int findPosition()
 {
-	if (SensorValue[ultrasonic] < 220)
+	if (SensorValue[ultrasonic] < 115 || SensorValue[ultrasonic] > 420)
+	{
+		return 3;
+	}
+	else if (SensorValue[ultrasonic] < 210)
 	{
 		return 1;
 	}
-	else if (SensorValue[ultrasonic] < 420)
-	{
-		return 2;
-	}
 	else
 	{
-		return 3;
+		return 2;
 	}
 }
 
