@@ -14,13 +14,11 @@
 
 void goToKickstand()
 {
-	drive(-10,-60,-60)
-	turn(right)
-	drive(420,42,42);
-	turn(90,90);
-	drive(-420,20,20);
+	drive(1500,70,70)
+	turn(90,70)
+	drive(-1000,-70,-70);
 	turn(-90,90);
-	drive(-420,20,20);
+	drive(-2000,-70,-700);
 }
 
 task main()
