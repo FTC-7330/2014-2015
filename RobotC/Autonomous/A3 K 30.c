@@ -14,11 +14,6 @@
 
 int position;
 
-task displayPosition()
-{
-
-}
-
 task main()
 {
 	initializeRobot();
