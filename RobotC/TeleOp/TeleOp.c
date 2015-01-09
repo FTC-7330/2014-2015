@@ -176,10 +176,10 @@ task Drive()
 		}
 		else
 		{
-			motor[frontLeft] = joystickRightY;
-			motor[backLeft] = joystickRightY;
-			motor[frontRight] = joystickLeftY;
-			motor[backRight] = joystickLeftY;
+			motor[frontLeft] = joystickLeftY;
+			motor[backLeft] = joystickLeftY;
+			motor[frontRight] = joystickRightY;
+			motor[backRight] = joystickRightY;
 		}
 		wait1Msec(waitTime);
 	}
@@ -190,20 +190,6 @@ task Collection()
 
 	while(true)
 	{
-		if(joystick.joy2_TopHat == TOP_HAT_UP)
-		{
-			motor[motorA]= 100;
-		}
-		else if(joystick.joy2_TopHat == TOP_HAT_DOWN)
-		{
-			motor[motorA] = -100;
-		}
-		else
-		{
-			motor[motorA] = 0;
-			bFloatDuringInactiveMotorPWM = false;
-		}
-
 		if(isCollectorRunning)
 		{
 			motor[collectionMotor] = 50;
@@ -215,6 +201,13 @@ task Collection()
 
 		wait1Msec(waitTime);
 	}
+}
+
+task Winch()
+{
+
+
+
 }
 
 /*
@@ -236,6 +229,8 @@ task main()
 
 	startTask(Drive);
 	startTask(Collection);
+	startTask(Winch);
+	startTask(goalGrabber);
 	// startTask(Display);
 	inputManager();
 }
