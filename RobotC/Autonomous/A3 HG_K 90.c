@@ -29,8 +29,14 @@ task main()
 	int beaconPosition = findPosition();
 	if (beaconPosition == 3)
 	{
-		drive(-4000, -50, -50);
-		goToKickstand();
+		drive(-500,-500,-50);
+		wait1Msec(100);
+		turn(90,50);
+		drive(-500,-500,-50);
+		wait1Msec(100);
+		turn(-90,50);
+		drive(-2500,-2500,-50);
+		//goToKickstand();
 	}
 	else if (beaconPosition == 2)
 	{
