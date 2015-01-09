@@ -1,9 +1,11 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTMotor)
 #pragma config(Hubs,  S2, HTServo,  none,     none,     none)
+#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
+#pragma config(Sensor, S2,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S3,     ultrasonic,     sensorSONAR)
 #pragma config(Sensor, S4,     gyro,           sensorI2CHiTechnicGyro)
-#pragma config(Motor,  mtr_S1_C1_1,     winchMotor,    tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C1_2,     hookMotor,     tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C1_1,     winchMotor,    tmotorTetrix, PIDControl, encoder)
+#pragma config(Motor,  mtr_S1_C1_2,     hookMotor,     tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C2_1,     backRight,     tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C2_2,     backLeft,      tmotorTetrix, PIDControl, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C3_1,     frontRight,    tmotorTetrix, PIDControl, encoder)
@@ -40,8 +42,8 @@ int waitTime = 50;
 
 bool isMecanum = true;
 bool isCollectorRunning = false;
-bool isShooterRunning = true;
-bool isCamUp = false;
+bool gatesOpen = false;
+bool hookDown = false;
 
 
 bool isTurbo;
@@ -87,6 +89,11 @@ void inputManager()
 {
 	bool startJoyONEIsPressed = false;
 	bool startJoyONEWasPressed = false;
+	bool lbJoyONEWasPressed = false;
+	bool lbJoyONEIsPressed = false;
+	bool rbJoyONEIsPressed = false;
+	bool rbJoyONEWasPressed = false;
+
 	bool startJoyTWOIsPressed = false;
 	bool startJoyTWOWasPressed = false;
 	bool lbJoyTWOWasPressed = false;
@@ -101,6 +108,8 @@ void inputManager()
 
 			//Joystick 1 Booleans
 			startJoyONEIsPressed = (joy1Btn(START_BUTTON)==1);
+			rbJoyONEIsPressed = (joy1Btn(RIGHT_BUTTON)==1);
+			lbJoyONEIsPressed = (joy1Btn(LEFT_BUTTON)==1);
 
 			//Joystick 2 Booleans
 			rbJoyTWOIsPressed = (joy2Btn(RIGHT_BUTTON)==1);
@@ -117,19 +126,16 @@ void inputManager()
 				isCollectorRunning = !isCollectorRunning;
 			}
 
-			if((lbJoyTWOIsPressed&&!lbJoyTWOWasPressed)&&(rbJoyTWOIsPressed&&!rbJoyTWOWasPressed))
+			if(rbJoyONEIsPressed&&!rbJoyONEWasPressed)
 			{
-				isShooterRunning = !isShooterRunning;
+				hookDown = !hookDown;
 			}
 
-			if(joy1Btn(TOP_HAT_UP)==1)
+			if(lbJoyONEIsPressed&&!lbJoyONEWasPressed)
 			{
-				isCamUp = true;
+				gatesOpen = !gatesOpen;
 			}
-			else if(joy1Btn(TOP_HAT_DOWN)==1)
-			{
-				isCamUp = false;
-			}
+
 
 			joystickRightY = checkDeadZone(-joystick.joy1_y2);
 			joystickLeftY = checkDeadZone(joystick.joy1_y1);
@@ -147,6 +153,9 @@ void inputManager()
 			// joystickLeftX = checkDeadZone(joystick.joy1_x1);
 
 			startJoyONEWasPressed = startJoyONEIsPressed;
+			rbJoyONEWasPressed = rbJoyONEIsPressed;
+			lbJoyONEWasPressed = lbJoyONEIsPressed;
+
 			startJoyTWOWasPressed = startJoyTWOIsPressed;
 			rbJoyTWOWasPressed = rbJoyTWOIsPressed;
 			lbJoyTWOWasPressed = lbJoyTWOIsPressed;
@@ -213,6 +222,25 @@ task Winch()
 
 }
 
+task GoalGrabber()
+{
+	int gateOpenPos = 300;
+	int gateClosedPos = 100;
+
+	if(gatesOpen)
+	{
+		servo[leftGate] = gateOpenPos;
+		servo[rightGate]= gateOpenPos;
+	}
+	else
+	{
+		servo[leftGate] = gateClosedPos;
+		servo[rightGate]= gateClosedPos;
+	}
+
+
+}
+
 /*
 task Display()
 {
@@ -233,7 +261,7 @@ task main()
 	startTask(Drive);
 	startTask(Collection);
 	startTask(Winch);
-	//startTask(goalGrabber);
+	startTask(GoalGrabber);
 	// startTask(Display);
 	inputManager();
 }
