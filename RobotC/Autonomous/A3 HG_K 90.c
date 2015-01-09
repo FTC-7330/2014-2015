@@ -1,14 +1,17 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTMotor)
-#pragma config(Sensor, S2,     ultrasonic,     sensorSONAR)
+#pragma config(Hubs,  S2, HTServo,  none,     none,     none)
+#pragma config(Sensor, S3,     ultrasonic,     sensorSONAR)
 #pragma config(Sensor, S4,     gyro,           sensorI2CHiTechnicGyro)
-#pragma config(Motor,  mtr_S1_C1_1,     motorD,        tmotorTetrix, PIDControl, encoder)
-#pragma config(Motor,  mtr_S1_C1_2,     motorE,        tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C1_1,     winchMotor,    tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C1_2,     hookMotor,     tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C2_1,     backRight,     tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C2_2,     backLeft,      tmotorTetrix, PIDControl, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C3_1,     frontRight,    tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C3_2,     frontLeft,     tmotorTetrix, PIDControl, reversed, encoder)
-#pragma config(Motor,  mtr_S1_C4_1,     camMotor,      tmotorTetrix, PIDControl, encoder)
-#pragma config(Motor,  mtr_S1_C4_2,     collectionMotor, tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C4_1,     collectionMotor, tmotorTetrix, openLoop)
+#pragma config(Servo,  srvo_S2_C1_1,    leftGate,             tServoStandard)
+#pragma config(Servo,  srvo_S2_C1_2,    rightGate,            tServoStandard)
+#pragma config(Servo,  srvo_S2_C1_3,    bucket,               tServoStandard)
 
 #include "2014 Autonomous Functions.h"
 
