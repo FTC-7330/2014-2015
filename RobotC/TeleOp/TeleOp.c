@@ -205,13 +205,22 @@ task Collection()
 		wait1Msec(waitTime);
 	}
 }
-
-task Winch()
+task Winch()  //Written by Jake
 {
-
-
-
+	if (joy2Btn(TOP_HAT_UP)==1)
+	{
+		motor[winchmotor] = 50;
+	}
+	else if (joy2Btn(TOP_HAT_DOWN)==1)
+	{
+		motor[winchmotor] = -50;
+	}
+	else
+	{
+		motor[winchmotor] = 0;
+	}
 }
+
 
 /*
 task Display()
