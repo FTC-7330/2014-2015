@@ -245,29 +245,38 @@ task Winch()  //Written by Jake
 task GoalGrabber()
 {
 	int gateOpenPos = 165;
-	int gateClosedPos = 50;
-	bool gateWasOpen;
+	int gateClosedPos = 60;
+	int hookUpPos = 0;
+	int hookDownPos = 0;
 
 	while (true)
 	{
-		if(gatesOpen && !gateWasOpen)
+		if(gatesOpen && servoTarget[leftGate] != gateOpenPos && servoTarget[rightGate] != gateOpenPos )
 		{
 			servo[leftGate] = gateOpenPos;
 			servo[rightGate]= gateOpenPos;
 		}
-		else if(!gatesOpen && gateWasOpen)
+		else if(!gatesOpen && servoTarget[leftGate] != gateClosedPos && servoTarget[rightGate] != gateClosedPos )
 		{
-			servo[leftGate] = gateClosedPos + 25;
-			servo[rightGate]= gateClosedPos + 25;
-			wait1Msec(10);
 			servo[leftGate] = gateClosedPos;
 			servo[rightGate]= gateClosedPos;
 		}
 
-		gateWasOpen = gatesOpen;
+		/*if(hookDown && nMotorEncoder[hookMotor]<hookDownPos)
+		{
+			motor[hookMotor] = -30;
+		}
+		else if(!hookDown && nMotorEncoder[hookMotor]>hookUpPos)
+		{
+			motor[hookMotor] = 30;
+		}
+		else
+		{
+			motor[hookMotor] = 0;
+		}*/
 	}
-
 }
+
 
 
 /*
