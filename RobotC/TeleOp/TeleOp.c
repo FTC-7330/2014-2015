@@ -214,6 +214,17 @@ task Collection()
 		wait1Msec(waitTime);
 	}
 }
+
+task printServo()
+{
+	while (true)
+	{
+		nxtDisplayString(1, "right gate: %d", servo[rightGate]);
+		nxtDisplayString(2, "left gate: %d", servo[leftGate]);
+		wait1Msec(10);
+	}
+}
+
 task Winch()  //Written by Jake
 {
 	if (joy2Btn(TOP_HAT_UP)==1)
@@ -233,20 +244,28 @@ task Winch()  //Written by Jake
 
 task GoalGrabber()
 {
-	int gateOpenPos = 300;
-	int gateClosedPos = 100;
+	int gateOpenPos = 165;
+	int gateClosedPos = 50;
+	bool gateWasOpen;
 
-	if(gatesOpen)
+	while (true)
 	{
-		servo[leftGate] = gateOpenPos;
-		servo[rightGate]= gateOpenPos;
-	}
-	else
-	{
-		servo[leftGate] = gateClosedPos;
-		servo[rightGate]= gateClosedPos;
-	}
+		if(gatesOpen && !gateWasOpen)
+		{
+			servo[leftGate] = gateOpenPos;
+			servo[rightGate]= gateOpenPos;
+		}
+		else if(!gatesOpen && gateWasOpen)
+		{
+			servo[leftGate] = gateClosedPos + 25;
+			servo[rightGate]= gateClosedPos + 25;
+			wait1Msec(10);
+			servo[leftGate] = gateClosedPos;
+			servo[rightGate]= gateClosedPos;
+		}
 
+		gateWasOpen = gatesOpen;
+	}
 
 }
 
@@ -271,6 +290,7 @@ task main()
 	startTask(Drive);
 	startTask(Collection);
 	startTask(Winch);
+	startTask(PrintServo);
 	startTask(GoalGrabber);
 	// startTask(Display);
 	inputManager();
