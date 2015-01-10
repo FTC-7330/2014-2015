@@ -43,7 +43,9 @@ int waitTime = 50;
 bool isMecanum = true;
 bool isCollectorRunning = false;
 bool gatesOpen = false;
-bool hookDown = false;
+bool hookDown = true;
+bool winchMoving = false;
+bool bucketDown = false;
 
 
 bool isTurbo;
@@ -221,59 +223,79 @@ task printServo()
 	{
 		nxtDisplayString(1, "right gate: %d", servo[rightGate]);
 		nxtDisplayString(2, "left gate: %d", servo[leftGate]);
+		nxtDisplayString(3, "hook encoder: %d", nMotorEncoder[hookMotor]);
 		wait1Msec(10);
 	}
 }
 
 task Winch()  //Written by Jake
 {
-	if (joy2Btn(TOP_HAT_UP)==1)
+	int bucketUpPos;
+	int bucketDownPos;
+	while(true)
 	{
-		motor[winchMotor] = 50;
-	}
-	else if (joy2Btn(TOP_HAT_DOWN)==1)
-	{
-		motor[winchMotor] = -50;
-	}
-	else
-	{
-		motor[winchMotor] = 0;
+		if (joy2Btn(TOP_HAT_UP)==1)
+		{
+			winchMoving = true;
+			motor[winchMotor] = 50;
+		}
+		else if (joy2Btn(TOP_HAT_DOWN)==1)
+		{
+			winchMoving = true;
+			motor[winchMotor] = -50;
+		}
+		else
+		{
+			winchMoving = false;
+			motor[winchMotor] = 0;
+		}
+
+		if(bucketDown && !winchMoving)
+		{
+			servo[bucketDownPos] = bucketDownPos;
+		}
+		else if(!bucketDown && !winchMoving || winchMoving)
+		{
+			servo[bucket] = bucketUpPos;
+		}
 	}
 }
 
 
 task GoalGrabber()
 {
-	int gateOpenPos = 165;
-	int gateClosedPos = 60;
-	int hookUpPos = 0;
-	int hookDownPos = 0;
+	int leftGateClosedPos = 165;
+	int leftGateOpenPos = 45;
+	int rightGateClosedPos = 45;
+	int rightGateOpenPos = 165;
+	int hookUpPos = 40;
+	int hookDownPos = 15;
 
 	while (true)
 	{
-		if(gatesOpen && servoTarget[leftGate] != gateOpenPos && servoTarget[rightGate] != gateOpenPos )
+		if(gatesOpen && servoTarget[leftGate] != leftGateOpenPos && servoTarget[rightGate] != rightGateOpenPos )
 		{
-			servo[leftGate] = gateOpenPos;
-			servo[rightGate]= gateOpenPos;
+			servo[leftGate] = leftGateOpenPos;
+			servo[rightGate]= rightGateOpenPos;
 		}
-		else if(!gatesOpen && servoTarget[leftGate] != gateClosedPos && servoTarget[rightGate] != gateClosedPos )
+		else if(!gatesOpen && servoTarget[leftGate] != leftGateClosedPos && servoTarget[rightGate] != rightGateClosedPos )
 		{
-			servo[leftGate] = gateClosedPos;
-			servo[rightGate]= gateClosedPos;
+			servo[leftGate] = leftGateClosedPos;
+			servo[rightGate]= rightGateClosedPos;
 		}
 
-		/*if(hookDown && nMotorEncoder[hookMotor]<hookDownPos)
+		if(hookDown && nMotorEncoder[hookMotor]> hookDownPos)
 		{
-			motor[hookMotor] = -30;
+			motor[hookMotor] = -5;
 		}
-		else if(!hookDown && nMotorEncoder[hookMotor]>hookUpPos)
+		else if(!hookDown && nMotorEncoder[hookMotor] < hookUpPos)
 		{
-			motor[hookMotor] = 30;
+			motor[hookMotor] = 5;
 		}
 		else
 		{
 			motor[hookMotor] = 0;
-		}*/
+		}
 	}
 }
 
@@ -293,9 +315,9 @@ task Display()
 
 task main()
 {
-	// initializeRobot();
+	//initializeRobot();
   waitForStart();
-
+	nMotorEncoder[hookMotor] = 0;
 	startTask(Drive);
 	startTask(Collection);
 	startTask(Winch);
