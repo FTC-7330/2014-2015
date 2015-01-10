@@ -40,6 +40,14 @@ int scaledLeftY;
 int scaledRightY;
 int waitTime = 50;
 
+int winchPosition = 0;
+int winchEncoderPosition = 0;
+
+bool yJoyTWOIsPressed;
+bool yJoyTWOWasPressed;
+bool aJoyTWOIsPressed;
+bool aJoyTWOWasPressed;
+
 bool isMecanum = true;
 bool isCollectorRunning = false;
 bool gatesOpen = false;
@@ -103,6 +111,10 @@ void inputManager()
 	bool rbJoyTWOIsPressed = false;
 	bool rbJoyTWOWasPressed = false;
 
+	yJoyTWOIsPressed = false;
+	yJoyTWOWasPressed = false;
+	aJoyTWOIsPressed = false;
+	aJoyTWOWasPressed = false;
 
 	while(true)
 	{
@@ -117,6 +129,9 @@ void inputManager()
 			rbJoyTWOIsPressed = (joy2Btn(RIGHT_BUTTON)==1);
 			startJoyTWOIsPressed = (joy2Btn(START_BUTTON)==1);
 			isTurbo = (joy2Btn(LEFT_BUTTON)==1);
+			yJoyTWOIsPressed = (joy2Btn(BUTTON_Y)==1);
+			aJoyTWOIsPressed = (joy2Btn(BUTTON_A)==1);
+
 
 			if(startJoyONEIsPressed&&!startJoyONEWasPressed)
 			{
@@ -161,7 +176,8 @@ void inputManager()
 			startJoyTWOWasPressed = startJoyTWOIsPressed;
 			rbJoyTWOWasPressed = rbJoyTWOIsPressed;
 			lbJoyTWOWasPressed = lbJoyTWOIsPressed;
-
+			yJoyTWOWasPressed = yJoyTWOIsPressed;
+			aJoyTWOWasPressed = aJoyTWOIsPressed;
 			// wait1Msec(waitTime);
 	}
 }
@@ -227,12 +243,66 @@ task printServo()
 		wait1Msec(10);
 	}
 }
-
 task Winch()  //Written by Jake
 {
+
 	int bucketUpPos;
 	int bucketDownPos;
 	while(true)
+
+	if (!yJoyTWOWasPressed && yJoyTWOIsPressed && winchPosition != 4)
+	{
+		if(winchPosition == 0)
+		{
+			winchEncoderPosition = someValue;
+			while(nMotorEncoder[winchMotor] < winchEncoderPosition)
+				motor[winchMotor] = 50;
+			motor[winchMotor] = 0;
+			winchPosition++;
+		}
+		else if(winchPosition == 1)
+		{
+			winchEncoderPosition = someValue;
+			while(nMotorEncoder[winchMotor] < winchEncoderPosition)
+				motor[winchMotor] = 50;
+			motor[winchMotor] = 0;
+			winchPosition++;
+		}
+		else if(winchPosition == 2)
+		{
+			winchEncoderPosition = someValue;
+			while(nMotorEncoder[winchMotor] < winchEncoderPosition)
+				motor[winchMotor] = 50;
+			motor[winchMotor] = 0;
+			winchPosition++;
+		}
+		else if(winchPosition == 3)
+		{
+			winchEncoderPosition = someValue;
+			while(nMotorEncoder[winchMotor] < winchEncoderPosition)
+				motor[winchMotor] = 50;
+			motor[winchMotor] = 0;
+			winchPosition++;
+		}
+	}
+	else if (!aJoyTWOWasPressed && aJoyTWOIsPressed)
+	{
+		winchEncoderPosition = someValue;
+		while(nMotorEncoder[winchMotor] < winchEncoderPosition)
+			motor[winchMotor] = 50;
+		motor[winchMotor] = 0;
+		winchPosition = 0;
+	}
+	if (joy2Btn(TOP_HAT_UP)==1)
+	{
+		motor[winchMotor] = 50;
+	}
+	else if (joy2Btn(TOP_HAT_DOWN)==1)
+	{
+		motor[winchMotor] = -50;
+	}
+	else
+
 	{
 		if (joy2Btn(TOP_HAT_UP)==1)
 		{
