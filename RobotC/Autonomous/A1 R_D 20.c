@@ -21,7 +21,7 @@
 
 task main()
 {
-	//waitForStart();
+	waitForStart();
 	initializeRobot();
 	startTask(printEncoderValues);
   drive(-3000, -50, -50);

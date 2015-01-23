@@ -16,6 +16,7 @@
 #pragma config(Servo,  srvo_S2_C1_3,    bucket,               tServoStandard)
 
 #include "2014 Autonomous Functions.h"
+#include "JoystickDriver.c"
 
 // moves robot from high goal to kickstand
 void goToKickstand()
@@ -30,6 +31,7 @@ void goToKickstand()
 
 task main()
 {
+	waitForStart();
 	initializeRobot();
 	int beaconPosition = findPosition();
 	if (beaconPosition == 3)

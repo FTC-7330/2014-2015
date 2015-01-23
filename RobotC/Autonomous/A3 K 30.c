@@ -16,11 +16,13 @@
 #pragma config(Servo,  srvo_S2_C1_3,    bucket,               tServoStandard)
 
 #include "2014 Autonomous Functions.h"
+#include "JoystickDriver.c"
 
 int position;
 
 task main()
 {
+	waitForStart();
 	initializeRobot();
 	int position = findPosition();
 	nxtDisplayString(1,"position: %d", position);

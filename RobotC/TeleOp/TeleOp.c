@@ -72,6 +72,11 @@ int deadZone = 10;
 	 Controller 2:
 */
 
+void initializeRobot()
+{
+	nMotorEncoder[winchMotor] = 0;
+}
+
 int checkDeadZone(int joystickValue)
 {
 	if (joystickValue > deadZone || joystickValue < -deadZone)
@@ -153,6 +158,11 @@ void inputManager()
 				gatesOpen = !gatesOpen;
 			}
 
+			if(aJoyTWOIsPressed && !aJoyTWOWasPressed)
+			{
+				bucketDown = !bucketDown;
+			}
+
 
 			joystickRightY = checkDeadZone(-joystick.joy1_y2);
 			joystickLeftY = checkDeadZone(joystick.joy1_y1);
@@ -222,7 +232,7 @@ task Collection()
 	{
 		if(isCollectorRunning)
 		{
-			motor[collectionMotor] = 50;
+			motor[collectionMotor] = -80;
 		}
 		else
 		{
@@ -239,80 +249,26 @@ task printServo()
 	{
 		nxtDisplayString(1, "right gate: %d", servo[rightGate]);
 		nxtDisplayString(2, "left gate: %d", servo[leftGate]);
-		nxtDisplayString(3, "hook encoder: %d", nMotorEncoder[hookMotor]);
+		nxtDisplayString(3, "w encoder: %d", nMotorEncoder[winchMotor]);
 		wait1Msec(10);
 	}
 }
 task Winch()  //Written by Jake
 {
+	int bucketUpPos = 150;
+	int bucketDownPos = 50;
 
-	int bucketUpPos;
-	int bucketDownPos;
 	while(true)
-
-	if (!yJoyTWOWasPressed && yJoyTWOIsPressed && winchPosition != 4)
 	{
-		if(winchPosition == 0)
-		{
-			winchEncoderPosition = someValue;
-			while(nMotorEncoder[winchMotor] < winchEncoderPosition)
-				motor[winchMotor] = 50;
-			motor[winchMotor] = 0;
-			winchPosition++;
-		}
-		else if(winchPosition == 1)
-		{
-			winchEncoderPosition = someValue;
-			while(nMotorEncoder[winchMotor] < winchEncoderPosition)
-				motor[winchMotor] = 50;
-			motor[winchMotor] = 0;
-			winchPosition++;
-		}
-		else if(winchPosition == 2)
-		{
-			winchEncoderPosition = someValue;
-			while(nMotorEncoder[winchMotor] < winchEncoderPosition)
-				motor[winchMotor] = 50;
-			motor[winchMotor] = 0;
-			winchPosition++;
-		}
-		else if(winchPosition == 3)
-		{
-			winchEncoderPosition = someValue;
-			while(nMotorEncoder[winchMotor] < winchEncoderPosition)
-				motor[winchMotor] = 50;
-			motor[winchMotor] = 0;
-			winchPosition++;
-		}
-	}
-	else if (!aJoyTWOWasPressed && aJoyTWOIsPressed)
-	{
-		winchEncoderPosition = someValue;
-		while(nMotorEncoder[winchMotor] < winchEncoderPosition)
-			motor[winchMotor] = 50;
-		motor[winchMotor] = 0;
-		winchPosition = 0;
-	}
-	if (joy2Btn(TOP_HAT_UP)==1)
-	{
-		motor[winchMotor] = 50;
-	}
-	else if (joy2Btn(TOP_HAT_DOWN)==1)
-	{
-		motor[winchMotor] = -50;
-	}
-	else
-
-	{
-		if (joy2Btn(TOP_HAT_UP)==1)
+		if (joystick.joy2_TopHat == TOP_HAT_UP && nMotorEncoder[winchMotor] < 17200)
 		{
 			winchMoving = true;
-			motor[winchMotor] = 50;
+			motor[winchMotor] = 60;
 		}
-		else if (joy2Btn(TOP_HAT_DOWN)==1)
+		else if (joystick.joy2_TopHat == TOP_HAT_DOWN)
 		{
 			winchMoving = true;
-			motor[winchMotor] = -50;
+			motor[winchMotor] = -60;
 		}
 		else
 		{
@@ -320,11 +276,11 @@ task Winch()  //Written by Jake
 			motor[winchMotor] = 0;
 		}
 
-		if(bucketDown && !winchMoving)
+		if(bucketDown)
 		{
-			servo[bucketDownPos] = bucketDownPos;
+			servo[bucket] = bucketDownPos;
 		}
-		else if(!bucketDown && !winchMoving || winchMoving)
+		else if(!bucketDown)
 		{
 			servo[bucket] = bucketUpPos;
 		}
@@ -339,7 +295,7 @@ task GoalGrabber()
 	int rightGateClosedPos = 45;
 	int rightGateOpenPos = 165;
 	int hookUpPos = 40;
-	int hookDownPos = 15;
+	int hookDownPos = 20;
 
 	while (true)
 	{
@@ -385,14 +341,14 @@ task Display()
 
 task main()
 {
-	//initializeRobot();
+	initializeRobot();
   waitForStart();
 	nMotorEncoder[hookMotor] = 0;
 	startTask(Drive);
 	startTask(Collection);
 	startTask(Winch);
 	startTask(PrintServo);
-	startTask(GoalGrabber);
+	//startTask(GoalGrabber);
 	// startTask(Display);
 	inputManager();
 }
