@@ -48,11 +48,13 @@ task superDrive(){
 		x2 = joystick.joy1_x2 * .5;
 		y2 = joystick.joy1_y2 * .5;
 		// function for making new initial heading
+
+
 		if (joy1Btn(5) == 1){
 			initialHeading = radheading;
 		}
 		// starts free-spinning mode
-		if (joy1Btn(6) == 1){
+		if (true) {
 			// find joystick vector angle
 			joyAngle = atan2(y1, x1);
 			// find joystick vector magnitude
@@ -64,7 +66,7 @@ task superDrive(){
 			// find the direction needed to move
 	    	moveDirection(joyAngle + calcHeading, mag);
 	    	// fix movement drifting
-	    	if (abs(joystick.joy1_x1)<minJoy&&abs(joystick.joy1_y1)<minJoy/*&&abs(joystick.joy1_x2)<minJoy*/){
+	    	if (abs(joystick.joy1_x1)<minJoy&&abs(joystick.joy1_y1)<minJoy&&abs(joystick.joy1_x2)<minJoy){
 				FLset=0;FRset=0;
 			}
 			// find turning magnitude
@@ -79,11 +81,13 @@ task superDrive(){
 			movementAmount = (mag*3)/totalAmount;
 			turningAmount = turning/totalAmount;
 			// Apply finished values to motors
-	  	motor[FL] = FLset*movementAmount+turning*turningAmount;
-			motor[FR] = FRset*movementAmount-turning*turningAmount;
-			motor[BL] = FRset*movementAmount+turning*turningAmount;
-			motor[BR] = FLset*movementAmount-turning*turningAmount;
-		  } else {
+	  	motor[FL] = 2*FLset*movementAmount+2*turning*turningAmount;
+			motor[FR] = 2*FRset*movementAmount-2*turning*turningAmount;
+			motor[BL] = 2*FRset*movementAmount+2*turning*turningAmount;
+			motor[BR] = 2*FLset*movementAmount-2*turning*turningAmount;
+		 	nxtDisplayCenteredTextLine(4, "else block");
+			} else {
+
 			// Resets movement values
 			LF = 0;
 			RF = 0;
@@ -116,13 +120,16 @@ task superDrive(){
 				RB = 0;
 			}
 			// Apply Finished values to motors.
-			motor[FL] = LF;
+			nxtDisplayCenteredTextLine(4, "else block");
+			motor[FL] = LF; // initially no shift
 			motor[FR] = RF;
 			motor[BL] = LB;
 			motor[BR] = RB;
 		}
 		wait1Msec(10);
-	}
+
+
+}
 }
 
 // This task finds the heading of the robot using the gyro.
@@ -150,6 +157,7 @@ task display(){
 		//nxtDisplayCenteredTextLine(0, "Color: %d", c);
 		nxtDisplayCenteredTextLine(0, "Heading: %d", heading);
 		nxtDisplayCenteredTextLine(1, "joyAngle: %d", joyAngle);
+		nxtDisplayCenteredTextLine(2, "gyro: %d", SensorValue[gyro]);
 		wait1Msec(20);
 	}
 }
