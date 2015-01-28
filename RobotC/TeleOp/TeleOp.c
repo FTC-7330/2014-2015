@@ -102,6 +102,7 @@ int scaleJoystickValues(int joystickValue)
 
 void inputManager()
 {
+	//Initializing when buttons are pressed.
 	bool startJoyONEIsPressed = false;
 	bool startJoyONEWasPressed = false;
 	bool lbJoyONEWasPressed = false;
@@ -137,27 +138,27 @@ void inputManager()
 			yJoyTWOIsPressed = (joy2Btn(BUTTON_Y)==1);
 			aJoyTWOIsPressed = (joy2Btn(BUTTON_A)==1);
 
-
+			//Toggle to tank drive (which doesn't work).
 			if(startJoyONEIsPressed&&!startJoyONEWasPressed)
 			{
 				isMecanum = !isMecanum;
 			}
-
+			//Toggle collector.
 			if(startJoyTWOIsPressed&&!startJoyTWOWasPressed)
 			{
 				isCollectorRunning = !isCollectorRunning;
 			}
-
+			//Toggle goal grabbing hook
 			if(rbJoyONEIsPressed&&!rbJoyONEWasPressed)
 			{
 				hookDown = !hookDown;
 			}
-
+			//Toggle open gates
 			if(lbJoyONEIsPressed&&!lbJoyONEWasPressed)
 			{
 				gatesOpen = !gatesOpen;
 			}
-
+			//Toggles the bucket
 			if(aJoyTWOIsPressed && !aJoyTWOWasPressed)
 			{
 				bucketDown = !bucketDown;
@@ -224,7 +225,6 @@ task Drive()
 		wait1Msec(waitTime);
 	}
 }
-
 task Collection()
 {
 
@@ -253,33 +253,38 @@ task printServo()
 		wait1Msec(10);
 	}
 }
-task Winch()  //Written by Jake
+task Winch()  //Written by Jake (winch)
 {
+	//initial bucket values
 	int bucketUpPos = 150;
 	int bucketDownPos = 50;
 
-	while(true)
+	while(true)//manual winch movement
 	{
+		//When the top of the D-pad is pushed up, it will raise up at a power of 60.
 		if (joystick.joy2_TopHat == TOP_HAT_UP && nMotorEncoder[winchMotor] < 17200)
 		{
 			winchMoving = true;
 			motor[winchMotor] = 60;
 		}
+		//When the bottom of the D-pad is pushed down, it will lower at a power of 60.
 		else if (joystick.joy2_TopHat == TOP_HAT_DOWN)
 		{
 			winchMoving = true;
 			motor[winchMotor] = -60;
 		}
+		//When neither up nor down is pushed, the bucket stays still.
 		else
 		{
 			winchMoving = false;
 			motor[winchMotor] = 0;
 		}
-
+		//Opens bucket (and stays open).
 		if(bucketDown)
 		{
 			servo[bucket] = bucketDownPos;
 		}
+		//Closes bucket (and stays closed).
 		else if(!bucketDown)
 		{
 			servo[bucket] = bucketUpPos;

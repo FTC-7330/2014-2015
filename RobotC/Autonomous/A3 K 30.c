@@ -22,7 +22,7 @@ int position;
 
 task main()
 {
-	waitForStart();
+	//waitForStart();
 	initializeRobot();
 	int position = findPosition();
 	nxtDisplayString(1,"position: %d", position);
@@ -37,7 +37,6 @@ task main()
 		drive(-3800, -50, -50)
 		turn(-90, 40);
 		drive(-3800, -80, -80);
-
 	}
 	else if (position == 2)
 	{
