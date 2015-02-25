@@ -21,9 +21,10 @@
 
 task main()
 {
-	waitForStart();
-	initializeRobot();
-	startTask(printEncoderValues);
+	//waitForStart();
+	//initializeRobot();
+	//startTask(printEncoderValues);
+
   drive(-3000, -50, -50);
   //some credit to mihir but most of the credit to rohan :)
 }
