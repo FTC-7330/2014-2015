@@ -54,7 +54,7 @@ task superDrive(){
 			initialHeading = radheading;
 		}
 		// starts free-spinning mode
-		if (true) {
+		if (joy1Btn(6)==1) {
 			// find joystick vector angle
 			joyAngle = atan2(y1, x1);
 			// find joystick vector magnitude
@@ -81,10 +81,10 @@ task superDrive(){
 			movementAmount = (mag*3)/totalAmount;
 			turningAmount = turning/totalAmount;
 			// Apply finished values to motors
-	  	motor[FL] = 2*FLset*movementAmount+2*turning*turningAmount;
-			motor[FR] = 2*FRset*movementAmount-2*turning*turningAmount;
-			motor[BL] = 2*FRset*movementAmount+2*turning*turningAmount;
-			motor[BR] = 2*FLset*movementAmount-2*turning*turningAmount;
+	  	motor[FL] = 3*FLset*movementAmount+2*turning*turningAmount;
+			motor[FR] = 3*FRset*movementAmount-2*turning*turningAmount;
+			motor[BL] = 3*FRset*movementAmount+2*turning*turningAmount;
+			motor[BR] = 3*FLset*movementAmount-2*turning*turningAmount;
 		 	nxtDisplayCenteredTextLine(4, "else block");
 			} else {
 
