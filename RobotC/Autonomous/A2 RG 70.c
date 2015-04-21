@@ -26,74 +26,19 @@
 // distance from end of ramp to wall: 23.75 inches
 
 bool upBucket = true;
-bool closeGate = true;
+bool openGate = false;
 int bucketUpPos = 150;
 int bucketDownPos = 50;
-int leftGateClosedPos = 165;
-int leftGateOpenPos = 45;
-int rightGateClosedPos = 45;
-int rightGateOpenPos = 165;
-
-task servoStay();
-task raise();
-
-task main()
-{
-
-	 // waitForStart();
-	 initializeRobot();
-	 startTask(printHeading);
-	 startTask(servoStay);
-
-	 drive(-3000, -20, -20);
-	 startTask(raise);
-	 drive(-3000, -50, -50);
-	 closeGate = false;
-	 drive(-2300, -25, -25);
-	 upBucket = false;
-
-
-		// drive forward to secure the goal
-		// drive(1, 20, 20);
-		// wait1Msec(100);
-
-/*	motor[liftingMotor] = 30;
-		wait1Msec(500);
-		motor[liftingMotor] = 0;
-		wait1Msec(100);
-		motor[ballReleaseMotor] = 30;
-		wait1Msec(200);
-		motor[ballReleaseMotor] = 0; */
-
-		//turn(90, 50);
-		//drive(-35, -50, -50);
-		//turn(90, 50);
-		//drive(-98, -50, -50);
-		//turn(-90, 50);
-		//drive(-10, -50, -50);
-
-	 // detatch the cammotor
-/*	motor[camMotor] = -10;
-		wait1Msec(200);
-		motor[camMotor] = 0; */
-
-}
+int leftGateClosedPos = 45;
+int leftGateOpenPos = 165;
+int rightGateClosedPos = 165;
+int rightGateOpenPos = 45;
 
 task servoStay()
 {
 	while(true)
 	{
-		wait1Msec(50);
-		if (upBucket)
-		{
-			servo[bucket] = bucketUpPos;
-		}
-		else
-		{
-			servo[bucket] = bucketDownPos;
-		}
-
-		if (closeGate)
+		if(openGate)
 		{
 			servo[leftGate] = leftGateOpenPos;
 			servo[rightGate]= rightGateOpenPos;
@@ -109,10 +54,34 @@ task servoStay()
 task raise()
 {
 	nMotorEncoder(winchMotor) = 0;
-	nMotorEncoderTarget(winchMotor) = 13000;
+	nMotorEncoderTarget(winchMotor) = 11000;
 	motor(winchMotor) = 60;
 	while(nMotorRunState[winchMotor] != runStateIdle)
 	{
 	}
 	motor(winchMotor) = 0;
+}
+
+task main()
+{
+
+	 // waitForStart();
+	 initializeRobot();
+	 startTask(servoStay);
+
+	 drive(-5000, -30, -30);
+	 wait1Msec(1000);
+	 startTask(raise);
+	 openGate = true;
+	 wait1Msec(5000);
+	 drive(-4000, -35, -35)
+	 servo[bucket] = 60;
+	 wait1Msec(500);
+   servo[bucket] = 50;
+   wait1Msec(30000);
+
+
+		// drive forward to secure the goal
+		// drive(1, 20, 20);
+		// wait1Msec(100);
 }
