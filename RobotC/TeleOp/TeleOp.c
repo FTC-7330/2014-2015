@@ -353,7 +353,7 @@ task main()
 	startTask(Collection);
 	startTask(Winch);
 	startTask(PrintServo);
-	//startTask(GoalGrabber);
+	startTask(GoalGrabber);
 	// startTask(Display);
 	inputManager();
 }
